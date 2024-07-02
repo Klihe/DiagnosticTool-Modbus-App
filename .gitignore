@@ -1,0 +1,29 @@
+# Ignore virtual environment directory
+.venv/
+
+# Ignore macOS system files
+.DS_Store
+
+# Ignore Python bytecode files
+__pycache__/
+*.pyc
+
+# Ignore environment variable files
+.env
+
+# Ignore logs
+logs/
+*.log
+
+# Ignore compiled files
+*.o
+*.so
+
+# Ignore node_modules (if using Node.js)
+node_modules/
+
+# Ignore IDE/editor config files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace

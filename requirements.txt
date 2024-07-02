@@ -1,0 +1,5 @@
+pymodbus==3.6.9
+pandas==2.2.2
+pyserial==3.5
+numpy==2.0.0
+PyQt6==6.7.0
