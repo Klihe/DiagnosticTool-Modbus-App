@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QLabel, QComboBox, QLineEdit, QPushButton
+from PyQt6.QtWidgets import QLabel, QComboBox, QLineEdit, QPushButton, QLayout
 
 import window.commgroup.constants as c
 
@@ -31,7 +31,7 @@ class CommLine:
         if self.__refresh:
             self.__grabber[f"{self.__mark}_refresh"] = QPushButton("Refresh")
             
-    def _addLine(self, layout, row: int) -> None:
+    def _addLine(self, layout: QLayout, row: int) -> None:
         self.__layout = layout
         self.__row = row
         
@@ -45,7 +45,7 @@ class CommLine:
         if self.__refresh:
             self.__layout.addWidget(self.__grabber[f"{self.__mark}_refresh"], self.__row, 3)
             
-    def __toggle(self, checked) -> None:
+    def __toggle(self, checked: bool) -> None:
         if checked:
             print("Custom switch checked")
             self.__grabber[f"{self.__mark}_custom_opt"].show()
@@ -56,14 +56,14 @@ class CommLine:
             self.__grabber[f"{self.__mark}_custom_opt"].hide()
     
 class CommGroup:
-    def __init__(self, grabber) -> None:
+    def __init__(self, grabber: dict) -> None:
         self.__method = CommLine(grabber, descr="Method", options=c.METHOD_OPTIONS)
         self.__port = CommLine(grabber, descr="Port", refresh=True)
         self.__baudrate = CommLine(grabber, descr="Baudrate", options=c.BAUDRATE_OPTIONS)
         self.__parity = CommLine(grabber, descr="Parity", options=c.PARITY_OPTIONS)
         self.__stopbits = CommLine(grabber, descr="Stop Bits", options=c.STOPBITS_OPTIONS)
         
-    def addGroup(self, layout) -> None:
+    def addGroup(self, layout: QLayout) -> None:
         self.__method._addLine(layout=layout, row=0)
         self.__port._addLine(layout=layout, row=1)
         self.__baudrate._addLine(layout=layout, row=2)

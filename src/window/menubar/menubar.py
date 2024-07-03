@@ -1,14 +1,12 @@
+from PyQt6.QtWidgets import QMainWindow
 from PyQt6.QtGui import QAction
 
 class MenuBar:
-    def __init__(self, window, grabber) -> None:
-        self.__window = window
+    def __init__(self, grabber: dict, window: QMainWindow) -> None:
         self.__grabber = grabber
+        self.__window = window
         
         self._create()
-        
-    def onMyToolBarButtonClick(self) -> None:
-        print("You clicked on your button")
         
     def _create(self) -> None:
         self.__menu = self.__window.menuBar()

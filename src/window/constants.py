@@ -1,1 +1,2 @@
 WINDOW_TITLE = "Diagnostic Tool"
+WINDOW_GEOMETRY = (100, 100, 1200, 600)
