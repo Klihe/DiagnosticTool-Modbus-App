@@ -135,8 +135,8 @@ class ValuesGroup:
             self.__lines.append(line)
             
     def addGroup(self, layout) -> None:
-        self.__search.addSearch(layout=layout, row=0)
-        self.__descr.addDescr(layout=layout, row=1)
+        self.__search.addSearch(layout=layout, row=c.SEARCH_POSITION)
+        self.__descr.addDescr(layout=layout, row=c.DESCR_POSITION)
         
         for row, line in enumerate(self.__lines):
-            line.addLine(layout=layout, row=row+2)
+            line.addLine(layout=layout, row=row+c.VALUES_POSITION)

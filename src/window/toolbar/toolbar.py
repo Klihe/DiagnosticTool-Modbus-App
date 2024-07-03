@@ -1,47 +1,37 @@
-from PyQt6.QtWidgets import QToolBar, QLabel, QVBoxLayout, QWidget, QPushButton, QLineEdit, QHBoxLayout
-from PyQt6.QtGui import QAction, QActionGroup, QIcon
+from PyQt6.QtWidgets import QToolBar
+from PyQt6.QtGui import QAction
 
-from window.toolbar.helpers import ActionGroup, ValueButton
+from window.toolbar.helpers import ActionGroup, ValueButton, StateButton
 
 class ToolBar:
-    def __init__(self, window) -> None:
+    def __init__(self, window, grabber) -> None:
         self.__window = window
+        self.__grabber = grabber
         self._create()
         
-    def onMyToolBarButtonClick(self) -> None:
-        print("You clicked on your button")
-        
     def _create(self) -> None:
-        self.__toolbar = QToolBar("Main Toolbar")
+        self.__toolbar = QToolBar()
         self.__window.addToolBar(self.__toolbar)
         
-        self.__action_group1 = ActionGroup(self.__toolbar, self.__window)
+        self.__state_button = StateButton("Connect", "Disconnect", self.__window, self.__grabber)
+        self.__state_button.addAction(self.__toolbar)
+        
+        self.__action_group1 = ActionGroup(self.__toolbar, self.__window, self.__grabber)
         self.__action_group1.addAction("ReadFromDevice")
         self.__action_group1.addAction("ReadFromCSV")
         
-        self.__action_group1.triggered_connect("ReadFromDevice", self.__window.onMyToolBarButtonClick)
-        self.__action_group1.triggered_connect("ReadFromCSV", self.__window.onMyToolBarButtonClick)
+        self.__grabber["read"] = QAction("Read", self.__window)
+        self.__toolbar.addAction(self.__grabber["read"])
         
-        self.__button_action = QAction("Read", self.__window)
+        self.__value_button = ValueButton("ReadInInterval", self.__window, self.__grabber)
+        self.__value_button.addAction(self.__toolbar)
         
-        self.__button_action.setStatusTip("This is your button")
-        self.__button_action.triggered.connect(self.__window.onMyToolBarButtonClick)
-        self.__toolbar.addAction(self.__button_action)
-        
-        self.valuebutton = ValueButton("ReadInInterval", self.__toolbar, self.__window)  
-        
-        self.__action_group2 = ActionGroup(self.__toolbar, self.__window)
+        self.__action_group2 = ActionGroup(self.__toolbar, self.__window, self.__grabber)
         self.__action_group2.addAction("WriteToDevice")
         self.__action_group2.addAction("WriteToCSV")
         
-        self.__action_group2.triggered_connect("WriteToDevice", self.__window.onMyToolBarButtonClick)
-        self.__action_group2.triggered_connect("WriteToCSV", self.__window.onMyToolBarButtonClick)
-        
-        self.__write_button_action = QAction("Write", self.__window)
-        
-        self.__write_button_action.setStatusTip("This is your button")
-        self.__write_button_action.triggered.connect(self.__window.onMyToolBarButtonClick)
-        self.__toolbar.addAction(self.__write_button_action)
+        self.__grabber["write"] = QAction("Write", self.__window)
+        self.__toolbar.addAction(self.__grabber["write"])
         
 
     def on_button_clicked(self):
