@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QToolBar, QMainWindow
 from PyQt6.QtGui import QAction
 
-from window.toolbar.helpers import ActionGroup, ValueButton, StateButton
+from window.toolbar.helpers import ActionGroup, ValueButton
 
 class ToolBar:
     def __init__(self, grabber: dict, window: QMainWindow) -> None:
@@ -14,12 +14,13 @@ class ToolBar:
         self.__toolbar = QToolBar()
         self.__window.addToolBar(self.__toolbar)
         
-        self.__state_button = StateButton(self.__grabber, "Connect", "Disconnect", self.__window)
-        self.__state_button.addAction(self.__toolbar)
-        
         self.__action_group1 = ActionGroup(self.__grabber, self.__toolbar, self.__window)
-        self.__action_group1.addAction("ReadFromDevice")
-        self.__action_group1.addAction("ReadFromCSV")
+        self.__action_group1.addAction("Connect")
+        self.__action_group1.addAction("Disconnect")
+        
+        self.__action_group2 = ActionGroup(self.__grabber, self.__toolbar, self.__window)
+        self.__action_group2.addAction("ReadFromDevice")
+        self.__action_group2.addAction("ReadFromCSV")
         
         self.__grabber["read"] = QAction("Read", self.__window)
         self.__toolbar.addAction(self.__grabber["read"])
@@ -27,9 +28,9 @@ class ToolBar:
         self.__value_button = ValueButton(self.__grabber, "ReadInInterval", self.__window)
         self.__value_button.addAction(self.__toolbar)
         
-        self.__action_group2 = ActionGroup(self.__grabber, self.__toolbar, self.__window)
-        self.__action_group2.addAction("WriteToDevice")
-        self.__action_group2.addAction("WriteToCSV")
+        self.__action_group3 = ActionGroup(self.__grabber, self.__toolbar, self.__window)
+        self.__action_group3.addAction("WriteToDevice")
+        self.__action_group3.addAction("WriteToCSV")
         
         self.__grabber["write"] = QAction("Write", self.__window)
         self.__toolbar.addAction(self.__grabber["write"])

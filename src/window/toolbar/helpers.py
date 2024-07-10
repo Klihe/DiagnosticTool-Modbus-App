@@ -47,25 +47,3 @@ class ValueButton:
         self.__toolbar.addAction(self.__grabber[f"{self.__name}_action"])
         self.__toolbar.addAction(self.__widget_action)
         
-class StateButton:
-    def __init__(self, grabber: dict, name1: str, name2: str, window: QMainWindow) -> None:
-        self.__grabber = grabber
-        self.__name1 = name1
-        self.__name2 = name2
-        self.__window = window
-        
-        self.__grabber[f"{self.__name1}_{self.__name2}"] = QAction(self.__name1, self.__window)
-        self.__grabber[f"{self.__name1}_{self.__name2}"].setCheckable(True)
-        self.__grabber[f"{self.__name1}_{self.__name2}"].toggled.connect(self.__toggle)
-        
-    def addAction(self, toolbar) -> None:
-        self.__toolbar = toolbar
-        
-        self.__toolbar.addAction(self.__grabber[f"{self.__name1}_{self.__name2}"])
-        
-    def __toggle(self, checked) -> None:
-        if checked:
-            self.__grabber[f"{self.__name1}_{self.__name2}"].setText(self.__name2)
-        else:
-            self.__grabber[f"{self.__name1}_{self.__name2}"].setText(self.__name1)
-        

@@ -19,7 +19,7 @@ class ValuesSearch:
         
         self.__grabber["search_btn"] = QPushButton("Search")
         
-    def addSearch(self, layout: QLayout) -> None:
+    def _addSearch(self, layout: QLayout) -> None:
         self.__layout = layout
         
         self.__layout.addWidget(self.__grabber["search_entry"])
@@ -62,7 +62,7 @@ class ValuesDescr:
         self.__grabber["value_descr_item7"] = QLabel(self.__label7)
         self.__grabber["value_descr_item7"].setFixedSize(100, 20)
         
-    def addDescr(self, layout: QLayout) -> None:
+    def _addDescr(self, layout: QLayout) -> None:
         self.__layout = layout
         
         self.__layout.addWidget(self.__grabber["value_descr_item1"])
@@ -101,8 +101,23 @@ class ValuesLine:
         self.__grabber[f"name_edit_{self.__id}"] = QLineEdit(self.__name)
         self.__grabber[f"descr_edit_{self.__id}"] = QLineEdit(self.__description)
         self.__grabber[f"note_edit_{self.__id}"] = QLineEdit(self.__notes)
+        
+    def _updateLine(self, data) -> None:
+        print("update")
+        self.__group_label.setText(str(data["group"]))
+        self.__physical_address_label.setText(str(data["physical_address"]))
+        self.__logical_address_label.setText(str(data["logical_address"]))
+        
+        if self.__group == c.NAME_1 or self.__group == c.NAME_2:
+            self.__grabber[f"value_edit_{self.__id}"].setText(str(data["value"]))
+        else:
+            self.__value_label.setText(str(data["value"]))
+            
+        self.__grabber[f"name_edit_{self.__id}"].setText(str(data["name"]))
+        self.__grabber[f"descr_edit_{self.__id}"].setText(str(data["description"]))
+        self.__grabber[f"note_edit_{self.__id}"].setText(str(data["notes"]))
     
-    def addLine(self, layout, row: int) -> None:
+    def _addLine(self, layout, row: int) -> None:
         self.__layout = layout
         self.__row = row
         
@@ -119,6 +134,33 @@ class ValuesLine:
         self.__layout.addWidget(self.__grabber[f"descr_edit_{self.__id}"], self.__row, 5)
         self.__layout.addWidget(self.__grabber[f"note_edit_{self.__id}"], self.__row, 6)
         
+    def __del__(self) -> None:
+        self.__layout.removeWidget(self.__group_label)
+        self.__layout.removeWidget(self.__physical_address_label)
+        self.__layout.removeWidget(self.__logical_address_label)
+        
+        if self.__group == c.NAME_1 or self.__group == c.NAME_2:
+            self.__layout.removeWidget(self.__grabber[f"value_edit_{self.__id}"])
+        else:
+            self.__layout.removeWidget(self.__value_label)
+        
+        self.__layout.removeWidget(self.__grabber[f"name_edit_{self.__id}"])
+        self.__layout.removeWidget(self.__grabber[f"descr_edit_{self.__id}"])
+        self.__layout.removeWidget(self.__grabber[f"note_edit_{self.__id}"])
+        
+        self.__group_label.deleteLater()
+        self.__physical_address_label.deleteLater()
+        self.__logical_address_label.deleteLater()
+        
+        if self.__group == c.NAME_1 or self.__group == c.NAME_2:
+            self.__grabber[f"value_edit_{self.__id}"].deleteLater()
+        else:
+            self.__value_label.deleteLater()
+        
+        self.__grabber[f"name_edit_{self.__id}"].deleteLater()
+        self.__grabber[f"descr_edit_{self.__id}"].deleteLater()
+        self.__grabber[f"note_edit_{self.__id}"].deleteLater()
+        
 class ValuesGrid:
     def __init__(self, grabber: dict) -> None:
         self.__grabber = grabber
@@ -128,7 +170,7 @@ class ValuesGrid:
         self.__create()
     
     def __create(self) -> None:
-        for _ in range(25):
+        for _ in range(29):
             line = ValuesLine(
                 grabber=self.__grabber,
                 group='None',
@@ -143,11 +185,35 @@ class ValuesGrid:
             
             self.__lines.append(line)
             
-    def addGrid(self, layout: QLayout) -> None:
+    def _updateGrid(self, data) -> None:
+        self._clearGrid()
+        
+        for i in range(len(data["group"][:])):
+            line = ValuesLine(
+                grabber=self.__grabber,
+                group=str(data["group"][i]),
+                physical_address=str(data["physical_address"][i]),
+                logical_address=str(data["logical_address"][i]),
+                value=str(data["value"][i]),
+                name=str(data["name"][i]),
+                description=str(data["description"][i]),
+                notes=str(data["notes"][i]),
+                id=i
+            )
+            
+            self.__lines.append(line)
+            
+    def _addGrid(self, layout: QLayout) -> None:
         self.__layout = layout
         
         for row, line in enumerate(self.__lines):
-            line.addLine(layout=self.__layout, row=row)
+            line._addLine(layout=self.__layout, row=row)
+            
+    def _clearGrid(self) -> None:
+        for line in self.__lines:
+            del line
+            
+        self.__lines.clear()
         
 class ValuesGroup:
     def __init__(self, grabber: dict) -> None:
@@ -168,13 +234,18 @@ class ValuesGroup:
         self.__search = ValuesSearch(self.__grabber, c.ITEMS)
         self.__descr = ValuesDescr(self.__grabber, c.ITEMS)
         self.__grid = ValuesGrid(self.__grabber)
+        
+    def update(self, data) -> None:
+        self.__grid._updateGrid(data)
+        
+        self.addGroup(self.__layout)
             
     def addGroup(self, layout: QLayout) -> None:
         self.__layout = layout
         
-        self.__search.addSearch(self.__search_layout)
-        self.__descr.addDescr(self.__descr_layout)
-        self.__grid.addGrid(self.__grid_layout)
+        self.__search._addSearch(self.__search_layout)
+        self.__descr._addDescr(self.__descr_layout)
+        self.__grid._addGrid(self.__grid_layout)
         
         self.__scroll_area.setWidget(self.__grid_container)
         

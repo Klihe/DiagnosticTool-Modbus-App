@@ -60,6 +60,7 @@ class CommGroup:
         self.__method = CommLine(grabber, descr="Method", options=c.METHOD_OPTIONS)
         self.__port = CommLine(grabber, descr="Port", refresh=True)
         self.__baudrate = CommLine(grabber, descr="Baudrate", options=c.BAUDRATE_OPTIONS)
+        self.__bytesize = CommLine(grabber, descr="Byte Size", options=c.BYTESIZE_OPTIONS)
         self.__parity = CommLine(grabber, descr="Parity", options=c.PARITY_OPTIONS)
         self.__stopbits = CommLine(grabber, descr="Stop Bits", options=c.STOPBITS_OPTIONS)
         
@@ -67,5 +68,6 @@ class CommGroup:
         self.__method._addLine(layout=layout, row=0)
         self.__port._addLine(layout=layout, row=1)
         self.__baudrate._addLine(layout=layout, row=2)
-        self.__parity._addLine(layout=layout, row=3)
-        self.__stopbits._addLine(layout, row=4)
+        self.__bytesize._addLine(layout=layout, row=3)
+        self.__parity._addLine(layout=layout, row=4)
+        self.__stopbits._addLine(layout, row=5)
