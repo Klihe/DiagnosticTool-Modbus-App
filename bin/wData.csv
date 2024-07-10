@@ -1,0 +1,30 @@
+group;physical_address;logical_address;value;name;description;notes
+Coil;0;1;nan;manualCtrlEna;Povoleni manualniho ovladani pres modbus.;nan
+Coil;1;2;nan;outputEna;Manualni povoleni vystupu budice (pulsy).;nan
+Coil;2;3;nan;totalStopExtSet;Stisk total stop z externi aplikace.;nan
+Coil;3;4;nan;relayR1Ready;Budic pripraven.;nan
+Coil;4;5;nan;relay2Error;Havarie budice;nan
+Coil;5;6;nan;relay3;Bez funkce;nan
+Coil;6;7;nan;relay4Excitation;Vystup nabuzen;nan
+Coil;7;8;nan;relayR5;Bez funkce;nan
+Coil;8;9;nan;relayR6;Bez funkce;nan
+Coil;9;10;nan;relayR7;Bez funkce;nan
+Coil;10;11;nan;relayR8MainSwitch;Hlavni stikac;nan
+Coil;11;12;nan;currentModeEna;Povoleni rezimu primeho zadani proudu;nan
+Coil;12;13;nan;resetError;Potvrzeni vystavenych poruch;nan
+Coil;13;14;nan;saveParameters;Ulozeni parametu;nan
+Coil;14;15;nan;currentFeedbackEna;Povoleni zpetnovazebniho rizeni;nan
+Digital input;0;1;nan;manualCtrlflg;Povoleni primeho ovladani pres modbus.;nan
+Digital input;1;2;nan;outputFlg;Povoleni vystupu budice (pulsy).;nan
+Digital input;2;3;nan;totalStopExtFlg;Stick total stop z externi aplikace;nan
+Digital input;3;4;nan;relayR1ReadyFlg;Budic pripraven;nan
+Digital input;4;5;nan;relayR2ErrorFlg;Havarie;nan
+Digital input;5;6;nan;relayR3Flg;Bez funcke;nan
+Digital input;6;7;nan;relayR4ExctationFlg;Vstup nabuzen;nan
+Digital input;7;8;nan;relayR5Flg;Bez funkce;nan
+Digital input;8;9;nan;relayR6Flg;Bez funkce;nan
+Digital input;9;10;nan;relayR7Flg;Bez funkce;nan
+Digital input;10;11;nan;relayR8MainSwitchFlg;nan;nan
+Digital input;11;12;nan;currentModeFlg;Stav povoleni rezimu primeho zadani proudu;nan
+Holding register;0;1;nan;alfaReq;Manualni nastaveni uhlu sepnuti tyristoru;nan
+Input register;0;1;nan;alfaRes;Nastaveny uhel sepnuti tyristoru X10;nan

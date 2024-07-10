@@ -56,6 +56,16 @@ def main() -> None:
             window.grabber["ReadInInterval_timer"].stop()
             window.grabber["ReadInInterval_timer"].timeout.disconnect(read)
         return None
+    
+    def write() -> None:
+        if window.grabber["WriteToDevice"].isChecked():
+            temp = window.valuesgroup.get()
+            device.write(temp)
+        elif window.grabber["WriteToCSV"].isChecked():
+            temp = window.valuesgroup.get()
+            data.write('bin/wData.csv', temp)
+        else:
+            return
         
 
     window.grabber["port_refresh"].clicked.connect(port_refresh)
@@ -63,6 +73,7 @@ def main() -> None:
     window.grabber["Disconnect"].triggered.connect(disconnect)
     window.grabber["read"].triggered.connect(read)
     window.grabber["ReadInInterval_action"].toggled.connect(readInInterval)
+    window.grabber["write"].triggered.connect(write)
     
     window.show()
     app.exec()

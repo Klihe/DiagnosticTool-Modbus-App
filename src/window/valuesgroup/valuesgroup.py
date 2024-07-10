@@ -114,8 +114,7 @@ class ValuesLine:
         self.__grabber[f"note_edit_{self.__id}"] = QLineEdit(self.__notes)
         self.__grabber[f"note_edit_{self.__id}"].setFixedSize(150, 20)
         
-    def _updateLine(self, data) -> None:
-        print("update")
+    def _updateLine(self, data: dict) -> None:
         self.__group_label.setText(str(data["group"]))
         self.__physical_address_label.setText(str(data["physical_address"]))
         self.__logical_address_label.setText(str(data["logical_address"]))
@@ -128,8 +127,35 @@ class ValuesLine:
         self.__grabber[f"name_edit_{self.__id}"].setText(str(data["name"]))
         self.__grabber[f"descr_edit_{self.__id}"].setText(str(data["description"]))
         self.__grabber[f"note_edit_{self.__id}"].setText(str(data["notes"]))
+        
+    def _getLineData(self, data) -> None:
+        # data = {
+        #     "group": [],
+        #     "physical_address": [],
+        #     "logical_address": [],
+        #     "value": [],
+        #     "name": [],
+        #     "description": [],
+        #     "notes": []
+        # }
+        
+        data["group"].append(self.__group_label.text())
+        data["physical_address"].append(self.__physical_address_label.text())
+        data["logical_address"].append(self.__logical_address_label.text())
+        
+        if self.__group == c.NAME_1 or self.__group == c.NAME_2:
+            data["value"].append(self.__grabber[f"value_edit_{self.__id}"].text())
+        else:
+            data["value"].append(self.__value_label.text())
+            
+        data["name"].append(self.__grabber[f"name_edit_{self.__id}"].text())
+        data["description"].append(self.__grabber[f"descr_edit_{self.__id}"].text())
+        data["notes"].append(self.__grabber[f"note_edit_{self.__id}"].text())
+        
+        return data
+        
     
-    def _addLine(self, layout, row: int) -> None:
+    def _addLine(self, layout: QLayout, row: int) -> None:
         self.__layout = layout
         self.__row = row
         
@@ -197,7 +223,7 @@ class ValuesGrid:
             
             self.__lines.append(line)
             
-    def _updateGrid(self, data) -> None:
+    def _updateGrid(self, data: dict) -> None:
         self._clearGrid()
         
         for i in range(len(data["group"][:])):
@@ -214,6 +240,10 @@ class ValuesGrid:
             )
             
             self.__lines.append(line)
+            
+    def _getGridData(self, data) -> None:
+        for i in range(len(self.__lines)):
+            self.__lines[i]._getLineData(data)
             
     def _addGrid(self, layout: QLayout) -> None:
         self.__layout = layout
@@ -247,10 +277,25 @@ class ValuesGroup:
         self.__descr = ValuesDescr(self.__grabber, c.ITEMS)
         self.__grid = ValuesGrid(self.__grabber)
         
-    def update(self, data) -> None:
+    def update(self, data: dict) -> None:
         self.__grid._updateGrid(data)
         
         self.addGroup(self.__layout)
+        
+    def get(self) -> dict:
+        data = {
+            "group": [],
+            "physical_address": [],
+            "logical_address": [],
+            "value": [],
+            "name": [],
+            "description": [],
+            "notes": []
+        }
+        
+        self.__grid._getGridData(data)
+        
+        return data
             
     def addGroup(self, layout: QLayout) -> None:
         self.__layout = layout

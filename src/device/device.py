@@ -190,11 +190,6 @@ class Device:
             
             address += 1
             
-            
-            
-    def readInInterval(self) -> None:
-        pass
-    
-    def write(self) -> None:
+    def write(self, data: dict) -> None:
         pass
     
