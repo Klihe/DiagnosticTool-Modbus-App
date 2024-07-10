@@ -45,22 +45,22 @@ class ValuesDescr:
         self.__grabber["value_descr_item1"].setFixedSize(100, 20)
         
         self.__grabber["value_descr_item2"] = QLabel(self.__label2)
-        self.__grabber["value_descr_item2"].setFixedSize(100, 20)
+        self.__grabber["value_descr_item2"].setFixedSize(75, 20)
         
         self.__grabber["value_descr_item3"] = QLabel(self.__label3)
-        self.__grabber["value_descr_item3"].setFixedSize(100, 20)
+        self.__grabber["value_descr_item3"].setFixedSize(75, 20)
         
         self.__grabber["value_descr_item4"] = QLabel(self.__label4)
         self.__grabber["value_descr_item4"].setFixedSize(100, 20)
         
         self.__grabber["value_descr_item5"] = QLabel(self.__label5)
-        self.__grabber["value_descr_item5"].setFixedSize(100, 20)
+        self.__grabber["value_descr_item5"].setFixedSize(150, 20)
         
         self.__grabber["value_descr_item6"] = QLabel(self.__label6)
-        self.__grabber["value_descr_item6"].setFixedSize(100, 20)
+        self.__grabber["value_descr_item6"].setFixedSize(300, 20)
         
         self.__grabber["value_descr_item7"] = QLabel(self.__label7)
-        self.__grabber["value_descr_item7"].setFixedSize(100, 20)
+        self.__grabber["value_descr_item7"].setFixedSize(150, 20)
         
     def _addDescr(self, layout: QLayout) -> None:
         self.__layout = layout
@@ -90,17 +90,29 @@ class ValuesLine:
         
     def __create(self) -> None:
         self.__group_label = QLabel(self.__group)
+        self.__group_label.setFixedSize(100, 20)
+        
         self.__physical_address_label = QLabel(self.__physical_address)
+        self.__physical_address_label.setFixedSize(75, 20)
+        
         self.__logical_address_label = QLabel(self.__logical_address)
+        self.__logical_address_label.setFixedSize(75, 20)
         
         if self.__group == c.NAME_1 or self.__group == c.NAME_2:
             self.__grabber[f"value_edit_{self.__id}"] = QLineEdit(self.__value)
+            self.__grabber[f"value_edit_{self.__id}"].setFixedSize(100, 20)
         else:
             self.__value_label = QLabel(self.__value)
+            self.__value_label.setFixedSize(100, 20)
             
         self.__grabber[f"name_edit_{self.__id}"] = QLineEdit(self.__name)
+        self.__grabber[f"name_edit_{self.__id}"].setFixedSize(150, 20)
+        
         self.__grabber[f"descr_edit_{self.__id}"] = QLineEdit(self.__description)
+        self.__grabber[f"descr_edit_{self.__id}"].setFixedSize(300, 20)
+        
         self.__grabber[f"note_edit_{self.__id}"] = QLineEdit(self.__notes)
+        self.__grabber[f"note_edit_{self.__id}"].setFixedSize(150, 20)
         
     def _updateLine(self, data) -> None:
         print("update")

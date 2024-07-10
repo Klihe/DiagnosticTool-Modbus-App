@@ -47,11 +47,22 @@ def main() -> None:
         else:
             return
         
+    def readInInterval(checked) -> None:
+        if checked:
+            window.grabber["ReadInInterval_timer"].start()
+            window.grabber["ReadInInterval_timer"].setInterval(int(window.grabber["ReadInInterval_edit"].text()))
+            window.grabber["ReadInInterval_timer"].timeout.connect(read)
+        else:
+            window.grabber["ReadInInterval_timer"].stop()
+            window.grabber["ReadInInterval_timer"].timeout.disconnect(read)
+        return None
+        
 
     window.grabber["port_refresh"].clicked.connect(port_refresh)
     window.grabber["Connect"].triggered.connect(connect)
     window.grabber["Disconnect"].triggered.connect(disconnect)
     window.grabber["read"].triggered.connect(read)
+    window.grabber["ReadInInterval_action"].toggled.connect(readInInterval)
     
     window.show()
     app.exec()
