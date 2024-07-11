@@ -1,6 +1,27 @@
-from PyQt6.QtWidgets import QLabel, QComboBox, QLineEdit, QPushButton, QLayout
+from PyQt6.QtWidgets import QLabel, QComboBox, QLineEdit, QPushButton, QLayout, QGridLayout, QHBoxLayout
+from PyQt6.QtGui import QColor
+from PyQt6.QtCore import Qt
 
 import window.commgroup.constants as c
+
+class StateIndicator:
+    def __init__(self, grabber: dict) -> None:
+        self.__grabber = grabber
+        
+        self.__create()
+        
+    def __create(self) -> None:
+        self.__grabber["state_indicator"] = QLabel("Disconnected")
+        self.__grabber["state_indicator"].setStyleSheet("background-color: red;")
+        self.__grabber["state_indicator"].setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.__grabber["state_indicator"].setFixedHeight(30)
+        
+    def _update(self, state: str, color: str) -> None:
+        self.__grabber["state_indicator"].setText(state)
+        self.__grabber["state_indicator"].setStyleSheet(f"background-color: {color};")
+        
+    def _addStateIndicator(self, layout: QLayout) -> None:
+        layout.addWidget(self.__grabber["state_indicator"])
 
 class CommLine:
     def __init__(self, grabber, descr: str, options: list=[None], custom: bool=True, refresh: bool=False) -> None:
@@ -13,7 +34,8 @@ class CommLine:
         
         self.__create()
         
-    def __create(self) -> None:   
+    def __create(self) -> None:
+        self.__items_layout = QHBoxLayout()   
         self.__grabber[f"{self.__mark}_descr"] = QLabel(self.__label)
         
         self.__grabber[f"{self.__mark}_option"] = QComboBox()
@@ -34,26 +56,30 @@ class CommLine:
     def _get(self) -> str:
         data = ""
         
-        if self.__grabber[f"{self.__mark}_custom_swt"].isChecked():
-            data = self.__grabber[f"{self.__mark}_custom_opt"].text()
-        else:
+        if self.__custom:
+            if self.__grabber[f"{self.__mark}_custom_swt"].isChecked():
+                data = self.__grabber[f"{self.__mark}_custom_opt"].text()
+            else:
+                data = self.__grabber[f"{self.__mark}_option"].currentText()
+        else: 
             data = self.__grabber[f"{self.__mark}_option"].currentText()
             
         return data
             
-    def _addLine(self, layout: QLayout, row: int) -> None:
+    def _addLine(self, layout: QLayout) -> None:
         self.__layout = layout
-        self.__row = row
-        
-        self.__layout.addWidget(self.__grabber[f"{self.__mark}_descr"], self.__row, 0),
-        self.__layout.addWidget(self.__grabber[f"{self.__mark}_option"], self.__row, 1)
-        self.__layout.addWidget(self.__grabber[f"{self.__mark}_custom_opt"], self.__row, 1)
+
+        self.__items_layout.addWidget(self.__grabber[f"{self.__mark}_descr"]),
+        self.__items_layout.addWidget(self.__grabber[f"{self.__mark}_option"])
+        self.__items_layout.addWidget(self.__grabber[f"{self.__mark}_custom_opt"])
         
         if self.__custom:
-            self.__layout.addWidget(self.__grabber[f"{self.__mark}_custom_swt"], self.__row, 2)
+            self.__items_layout.addWidget(self.__grabber[f"{self.__mark}_custom_swt"])
             
         if self.__refresh:
-            self.__layout.addWidget(self.__grabber[f"{self.__mark}_refresh"], self.__row, 3)
+            self.__items_layout.addWidget(self.__grabber[f"{self.__mark}_refresh"])
+            
+        self.__layout.addLayout(self.__items_layout)
             
     def __toggle(self, checked: bool) -> None:
         if checked:
@@ -68,11 +94,12 @@ class CommLine:
 class CommGroup:
     def __init__(self, grabber: dict) -> None:
         self.__method = CommLine(grabber, descr="Method", options=c.METHOD_OPTIONS)
-        self.__port = CommLine(grabber, descr="Port", refresh=True)
+        self.__port = CommLine(grabber, descr="Port", custom=False, refresh=True)
         self.__baudrate = CommLine(grabber, descr="Baudrate", options=c.BAUDRATE_OPTIONS)
         self.__bytesize = CommLine(grabber, descr="Byte Size", options=c.BYTESIZE_OPTIONS)
         self.__parity = CommLine(grabber, descr="Parity", options=c.PARITY_OPTIONS)
         self.__stopbits = CommLine(grabber, descr="Stop Bits", options=c.STOPBITS_OPTIONS)
+        self.__state_indicator = StateIndicator(grabber)
         
     def get(self) -> dict:
         data = {
@@ -85,11 +112,18 @@ class CommGroup:
         }
         
         return data
+    
+    def update_state(self, state: str, color: str) -> None:
+        self.__state_indicator._update(state, color)
         
     def addGroup(self, layout: QLayout) -> None:
-        self.__method._addLine(layout=layout, row=0)
-        self.__port._addLine(layout=layout, row=1)
-        self.__baudrate._addLine(layout=layout, row=2)
-        self.__bytesize._addLine(layout=layout, row=3)
-        self.__parity._addLine(layout=layout, row=4)
-        self.__stopbits._addLine(layout, row=5)
+        self.__layout = layout
+        
+        self.__state_indicator._addStateIndicator(self.__layout)
+        
+        self.__method._addLine(layout=self.__layout)
+        self.__port._addLine(layout=self.__layout)
+        self.__baudrate._addLine(layout=self.__layout)
+        self.__bytesize._addLine(layout=self.__layout)
+        self.__parity._addLine(layout=self.__layout)
+        self.__stopbits._addLine(layout=self.__layout)

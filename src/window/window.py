@@ -17,7 +17,7 @@ class Window(QMainWindow):
         self.setGeometry(*c.WINDOW_GEOMETRY)
 
         self.__page_layout = QHBoxLayout()
-        self.__comm_layout = QGridLayout()
+        self.__comm_layout = QVBoxLayout()
         self.__values_layout = QVBoxLayout()
         
         self.toolbar = ToolBar(self.grabber, self)
