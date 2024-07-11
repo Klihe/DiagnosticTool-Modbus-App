@@ -1,0 +1,161 @@
+group;physical_address;logical_address;value;name;description;notes
+Coil;0;1;True;nan;nan;nan
+Coil;1;2;True;nan;nan;nan
+Coil;2;3;True;nan;nan;nan
+Coil;3;4;False;nan;nan;nan
+Coil;4;5;False;nan;nan;nan
+Coil;5;6;False;nan;nan;nan
+Coil;6;7;False;nan;nan;nan
+Coil;7;8;False;nan;nan;nan
+Coil;8;9;False;nan;nan;nan
+Coil;9;10;False;nan;nan;nan
+Coil;10;11;False;nan;nan;nan
+Coil;11;12;False;nan;nan;nan
+Coil;12;13;False;nan;nan;nan
+Coil;13;14;False;nan;nan;nan
+Coil;14;15;False;nan;nan;nan
+Coil;15;16;False;nan;nan;nan
+Coil;16;17;False;nan;nan;nan
+Coil;17;18;False;nan;nan;nan
+Coil;18;19;False;nan;nan;nan
+Coil;19;20;False;nan;nan;nan
+Coil;20;21;False;nan;nan;nan
+Coil;21;22;False;nan;nan;nan
+Coil;22;23;False;nan;nan;nan
+Coil;23;24;False;nan;nan;nan
+Coil;24;25;False;nan;nan;nan
+Coil;25;26;False;nan;nan;nan
+Coil;26;27;False;nan;nan;nan
+Coil;27;28;False;nan;nan;nan
+Coil;28;29;False;nan;nan;nan
+Coil;29;30;False;nan;nan;nan
+Coil;30;31;False;nan;nan;nan
+Coil;31;32;False;nan;nan;nan
+Discrete input;0;1;True;nan;nan;nan
+Discrete input;1;2;False;nan;nan;nan
+Discrete input;2;3;False;nan;nan;nan
+Discrete input;3;4;False;nan;nan;nan
+Discrete input;4;5;True;nan;nan;nan
+Discrete input;5;6;False;nan;nan;nan
+Discrete input;6;7;False;nan;nan;nan
+Discrete input;7;8;False;nan;nan;nan
+Discrete input;8;9;False;nan;nan;nan
+Discrete input;9;10;False;nan;nan;nan
+Discrete input;10;11;False;nan;nan;nan
+Discrete input;11;12;False;nan;nan;nan
+Discrete input;12;13;False;nan;nan;nan
+Discrete input;13;14;False;nan;nan;nan
+Discrete input;14;15;False;nan;nan;nan
+Discrete input;15;16;False;nan;nan;nan
+Discrete input;16;17;False;nan;nan;nan
+Discrete input;17;18;False;nan;nan;nan
+Discrete input;18;19;True;nan;nan;nan
+Discrete input;19;20;False;nan;nan;nan
+Discrete input;20;21;False;nan;nan;nan
+Discrete input;21;22;False;nan;nan;nan
+Discrete input;22;23;False;nan;nan;nan
+Discrete input;23;24;False;nan;nan;nan
+Discrete input;24;25;False;nan;nan;nan
+Discrete input;25;26;False;nan;nan;nan
+Discrete input;26;27;False;nan;nan;nan
+Discrete input;27;28;True;nan;nan;nan
+Discrete input;28;29;False;nan;nan;nan
+Discrete input;29;30;True;nan;nan;nan
+Discrete input;30;31;False;nan;nan;nan
+Discrete input;31;32;False;nan;nan;nan
+Input register;0;1;1200;nan;nan;nan
+Input register;1;2;1;nan;nan;nan
+Input register;2;3;0;nan;nan;nan
+Input register;3;4;0;nan;nan;nan
+Input register;4;5;0;nan;nan;nan
+Input register;5;6;26;nan;nan;nan
+Input register;6;7;27;nan;nan;nan
+Input register;7;8;29;nan;nan;nan
+Input register;8;9;30;nan;nan;nan
+Input register;9;10;31;nan;nan;nan
+Input register;10;11;33;nan;nan;nan
+Input register;11;12;0;nan;nan;nan
+Input register;12;13;0;nan;nan;nan
+Input register;13;14;0;nan;nan;nan
+Input register;14;15;0;nan;nan;nan
+Input register;15;16;0;nan;nan;nan
+Input register;16;17;29;nan;nan;nan
+Input register;17;18;28;nan;nan;nan
+Input register;18;19;26;nan;nan;nan
+Input register;19;20;0;nan;nan;nan
+Input register;20;21;25;nan;nan;nan
+Input register;21;22;25;nan;nan;nan
+Input register;22;23;0;nan;nan;nan
+Input register;23;24;30;nan;nan;nan
+Input register;24;25;0;nan;nan;nan
+Input register;25;26;0;nan;nan;nan
+Input register;26;27;0;nan;nan;nan
+Input register;27;28;0;nan;nan;nan
+Input register;28;29;0;nan;nan;nan
+Input register;29;30;0;nan;nan;nan
+Input register;30;31;0;nan;nan;nan
+Input register;31;32;0;nan;nan;nan
+Holding register;0;1;120;nan;nan;nan
+Holding register;1;2;1;nan;nan;nan
+Holding register;2;3;0;nan;nan;nan
+Holding register;3;4;0;nan;nan;nan
+Holding register;4;5;0;nan;nan;nan
+Holding register;5;6;0;nan;nan;nan
+Holding register;6;7;0;nan;nan;nan
+Holding register;7;8;0;nan;nan;nan
+Holding register;8;9;0;nan;nan;nan
+Holding register;9;10;0;nan;nan;nan
+Holding register;10;11;0;nan;nan;nan
+Holding register;11;12;0;nan;nan;nan
+Holding register;12;13;0;nan;nan;nan
+Holding register;13;14;0;nan;nan;nan
+Holding register;14;15;0;nan;nan;nan
+Holding register;15;16;0;nan;nan;nan
+Holding register;16;17;0;nan;nan;nan
+Holding register;17;18;0;nan;nan;nan
+Holding register;18;19;0;nan;nan;nan
+Holding register;19;20;0;nan;nan;nan
+Holding register;20;21;0;nan;nan;nan
+Holding register;21;22;0;nan;nan;nan
+Holding register;22;23;0;nan;nan;nan
+Holding register;23;24;0;nan;nan;nan
+Holding register;24;25;0;nan;nan;nan
+Holding register;25;26;0;nan;nan;nan
+Holding register;26;27;0;nan;nan;nan
+Holding register;27;28;0;nan;nan;nan
+Holding register;28;29;0;nan;nan;nan
+Holding register;29;30;0;nan;nan;nan
+Holding register;30;31;0;nan;nan;nan
+Holding register;31;32;0;nan;nan;nan
+Holding register;32;33;32;nan;nan;nan
+Holding register;33;34;33;nan;nan;nan
+Holding register;34;35;34;nan;nan;nan
+Holding register;35;36;35;nan;nan;nan
+Holding register;36;37;36;nan;nan;nan
+Holding register;37;38;37;nan;nan;nan
+Holding register;38;39;38;nan;nan;nan
+Holding register;39;40;39;nan;nan;nan
+Holding register;40;41;40;nan;nan;nan
+Holding register;41;42;41;nan;nan;nan
+Holding register;42;43;42;nan;nan;nan
+Holding register;43;44;43;nan;nan;nan
+Holding register;44;45;44;nan;nan;nan
+Holding register;45;46;45;nan;nan;nan
+Holding register;46;47;46;nan;nan;nan
+Holding register;47;48;47;nan;nan;nan
+Holding register;48;49;1;nan;nan;nan
+Holding register;49;50;49;nan;nan;nan
+Holding register;50;51;50;nan;nan;nan
+Holding register;51;52;51;nan;nan;nan
+Holding register;52;53;52;nan;nan;nan
+Holding register;53;54;53;nan;nan;nan
+Holding register;54;55;54;nan;nan;nan
+Holding register;55;56;55;nan;nan;nan
+Holding register;56;57;56;nan;nan;nan
+Holding register;57;58;57;nan;nan;nan
+Holding register;58;59;58;nan;nan;nan
+Holding register;59;60;59;nan;nan;nan
+Holding register;60;61;60;nan;nan;nan
+Holding register;61;62;61;nan;nan;nan
+Holding register;62;63;62;nan;nan;nan
+Holding register;63;64;63;nan;nan;nan

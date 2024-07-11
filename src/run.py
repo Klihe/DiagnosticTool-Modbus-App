@@ -23,7 +23,6 @@ def main() -> None:
     def connect() -> None:
         if not device.is_connected:
             data = window.commgroup.get()
-            print(data)
             
             device.connect(
                 method=str(data["method"]),
@@ -39,20 +38,14 @@ def main() -> None:
             device.disconnect()
         
     def read() -> None:
-        print("read")
         if device.is_connected:
             device.read()
             window.valuesgroup.update(device.data)
-        # if window.grabber["ReadFromDevice"].isChecked():
-        #     device.read()
-        #     window.valuesgroup.update(device.data)
-        # elif window.grabber["ReadFromCSV"].isChecked():
-        #     data.read("bin/data0.csv")
-        #     window.valuesgroup.update(data.data)
-        # else:
-        #     return
         
     def readInInterval(checked) -> None:
+        if not device.is_connected:
+            return None
+        
         if checked:
             window.grabber["ReadInInterval_timer"].start()
             window.grabber["ReadInInterval_timer"].setInterval(int(window.grabber["ReadInInterval_edit"].text()))
@@ -63,20 +56,12 @@ def main() -> None:
         return None
     
     def write() -> None:
-        temp = window.valuesgroup.get()
-        device.write(temp)
-        # if window.grabber["WriteToDevice"].isChecked():
-        #     temp = window.valuesgroup.get()
-        #     device.write(temp)
-        # elif window.grabber["WriteToCSV"].isChecked():
-        #     temp = window.valuesgroup.get()
-        #     data.write('bin/wData.csv', temp)
-        # else:
-        #     return
+        if device.is_connected:
+            temp = window.valuesgroup.get()
+            device.write(temp)
         
     def save() -> None:
         temp = window.valuesgroup.get()
-        print(temp)
         data.save(temp, window)
         
     def saveas() -> None:
@@ -86,13 +71,12 @@ def main() -> None:
     def open() -> None:
         data.load(window)
         window.valuesgroup.update(data.data)
-        
-
+    
     window.grabber["port_refresh"].clicked.connect(port_refresh)
     window.grabber["connect"].triggered.connect(connect)
     window.grabber["disconnect"].triggered.connect(disconnect)
     window.grabber["read"].triggered.connect(read)
-    window.grabber["ReadInInterval_action"].toggled.connect(readInInterval)
+    window.grabber["readInInterval_action"].toggled.connect(readInInterval)
     window.grabber["write"].triggered.connect(write)
     window.grabber["save"].triggered.connect(save)
     window.grabber["saveas"].triggered.connect(saveas)

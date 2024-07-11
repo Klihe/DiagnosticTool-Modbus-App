@@ -7,11 +7,6 @@ class Device:
     def _create(self) -> None:
         self.__client = None
         
-        self.__num_coils = 0
-        self.__num_discrete_inputs = 0
-        self.__num_input_registers = 0
-        self.__num_holding_registers = 0
-        
         self.data = {
             "group": [],
             "physical_address": [],
@@ -50,12 +45,11 @@ class Device:
             stopbits=self.__stopbits
         )
 
-        self.is_connected = True
-        print(self.__client.connect())
+        self.is_connected = self.__client.connect()
     
     def disconnect(self) -> None:
-        self.is_connected = False
         self.__client.close()
+        self.is_connected = False
     
     def read(self) -> None:
         self._clear_data()
@@ -79,10 +73,7 @@ class Device:
                 description = "None"
                 notes = "None"
                 
-                self.__num_coils += 1
-                
-            except Exception as e:
-                print(f"Exception occurred: {e}")
+            except:
                 break
             
             # Append only if no exception
@@ -115,10 +106,7 @@ class Device:
                 description = "None"
                 notes = "None"
                 
-                self.__num_discrete_inputs += 1
-                
-            except Exception as e:
-                print(f"Exception occurred: {e}")
+            except:
                 break
             
             # Append only if no exception
@@ -150,11 +138,8 @@ class Device:
                 name = "None"
                 description = "None"
                 notes = "None"
-                
-                self.__num_input_registers += 1
             
-            except Exception as e:
-                print(f"Exception occurred: {e}")
+            except:
                 break
             
             # Append only if no exception
@@ -187,10 +172,7 @@ class Device:
                 description = "None"
                 notes = "None"
                 
-                self.__num_holding_registers += 1
-                
-            except Exception as e:
-                print(f"Exception occurred: {e}")
+            except:
                 break
             
             # Append only if no exception
@@ -205,7 +187,6 @@ class Device:
             address += 1
             
     def write(self, data: dict) -> None:
-        print(data)
         
         for i in range(len(data["group"])):
             if data["group"][i] == "Coil":

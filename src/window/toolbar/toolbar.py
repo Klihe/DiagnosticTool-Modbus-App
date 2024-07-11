@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QToolBar, QMainWindow
 from PyQt6.QtGui import QAction
 
-from window.toolbar.helpers import ActionGroup, ValueButton
+from window.toolbar.helpers import ValueButton
 
 class ToolBar:
     def __init__(self, grabber: dict, window: QMainWindow) -> None:
@@ -20,14 +20,15 @@ class ToolBar:
         self.__grabber["disconnect"] = QAction("Disconnect", self.__window)
         self.__toolbar.addAction(self.__grabber["disconnect"])
         
+        self.__grabber["write"] = QAction("Write", self.__window)
+        self.__toolbar.addAction(self.__grabber["write"])
+        
         self.__grabber["read"] = QAction("Read", self.__window)
         self.__toolbar.addAction(self.__grabber["read"])
         
-        self.__value_button = ValueButton(self.__grabber, "ReadInInterval", self.__window)
+        self.__value_button = ValueButton(self.__grabber, "readInInterval", self.__window)
         self.__value_button.addAction(self.__toolbar)
         
-        self.__grabber["write"] = QAction("Write", self.__window)
-        self.__toolbar.addAction(self.__grabber["write"])
         
 
     def on_button_clicked(self):

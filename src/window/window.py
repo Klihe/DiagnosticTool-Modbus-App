@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QMainWindow, QScrollArea, QHBoxLayout, QVBoxLayout, QGridLayout, QWidget, QPushButton
+from PyQt6.QtWidgets import QMainWindow, QHBoxLayout, QVBoxLayout, QGridLayout, QWidget
 
 from window.toolbar.toolbar import ToolBar
 from window.menubar.menubar import MenuBar
@@ -20,8 +20,8 @@ class Window(QMainWindow):
         self.__comm_layout = QGridLayout()
         self.__values_layout = QVBoxLayout()
         
-        self.__toolbar = ToolBar(self.grabber, self)
-        self.__menubar = MenuBar(self.grabber, self)
+        self.toolbar = ToolBar(self.grabber, self)
+        self.menubar = MenuBar(self.grabber, self)
         self.commgroup = CommGroup(self.grabber)
         self.valuesgroup = ValuesGroup(self.grabber)
         

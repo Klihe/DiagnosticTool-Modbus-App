@@ -1,31 +1,7 @@
-from PyQt6.QtWidgets import QLabel, QLineEdit, QComboBox, QPushButton, QGridLayout, QHBoxLayout, QScrollArea, QWidget, QLayout
+from PyQt6.QtWidgets import QLabel, QLineEdit, QGridLayout, QHBoxLayout, QScrollArea, QWidget, QLayout
 
 import window.valuesgroup.constants as c
 
-# class ValuesSearch:
-#     def __init__(self, grabber: dict, items: list[str]) -> None:
-#         self.__grabber = grabber
-        
-#         self.__items = items
-        
-#         self.__create()
-        
-#     def __create(self) -> None:
-#         self.__grabber["search_entry"] = QComboBox()
-#         self.__grabber["search_entry"].addItems(self.__items)
-        
-#         self.__grabber["search_edit"] = QLineEdit()
-#         self.__grabber["search_edit"].setPlaceholderText("Search")
-        
-#         self.__grabber["search_btn"] = QPushButton("Search")
-        
-#     def _addSearch(self, layout: QLayout) -> None:
-#         self.__layout = layout
-        
-#         self.__layout.addWidget(self.__grabber["search_entry"])
-#         self.__layout.addWidget(self.__grabber["search_edit"])
-#         self.__layout.addWidget(self.__grabber["search_btn"])
-        
 class ValuesDescr:
     def __init__(self, grabber: dict, items: list[str]) -> None:
         self.__grabber = grabber
@@ -194,24 +170,10 @@ class ValuesGrid:
         self.__grabber = grabber
         
         self.__lines = []
-        
-        self.__create()
-    
-    def __create(self) -> None:
-        for _ in range(29):
-            line = ValuesLine(
-                grabber=self.__grabber,
-                group='None',
-                physical_address='None',
-                logical_address='None',
-                value='None',
-                name='None',
-                description='None',
-                notes='None',
-                id=_
-            )
-            
-            self.__lines.append(line)
+        self.__coils_lines = []
+        self.__discrete_input_lines = []
+        self.__input_register_lines = []
+        self.__holding_register_lines = []
             
     def _updateGrid(self, data: dict) -> None:
         self._clearGrid()

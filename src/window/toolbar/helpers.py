@@ -2,28 +2,6 @@ from PyQt6.QtWidgets import QWidget, QLineEdit, QHBoxLayout, QWidgetAction, QToo
 from PyQt6.QtGui import QAction, QActionGroup, QIcon
 from PyQt6.QtCore import QTimer
 
-class ActionGroup:
-    def __init__(self, grabber: dict, toolbar: QToolBar, window: QMainWindow) -> None:
-        self.__toolbar = toolbar
-        self.__window = window
-        self.__grabber = grabber
-        
-        self.__action_group = QActionGroup(window)
-        self.__action_group.setExclusive(True)
-        
-    def addAction(self, name: str, icon: QIcon=None) -> None:
-        if icon is None:
-            self.__grabber[name] = QAction(name, self.__window)
-        else:
-            self.__grabber[name] = QAction(icon, name, self.__window)
-            
-        self.__grabber[name].setCheckable(True)
-        self.__action_group.addAction(self.__grabber[name])
-        self.__toolbar.addAction(self.__grabber[name])
-        
-    def triggered_connect(self, name: str, function) -> None:
-        self.__grabber[name].triggered.connect(function)
-        
 class ValueButton:
     def __init__(self, grabber: dict, name: str, window: QMainWindow) -> None:
         self.__name = name
