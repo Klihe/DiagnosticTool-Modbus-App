@@ -2,29 +2,29 @@ from PyQt6.QtWidgets import QLabel, QLineEdit, QComboBox, QPushButton, QGridLayo
 
 import window.valuesgroup.constants as c
 
-class ValuesSearch:
-    def __init__(self, grabber: dict, items: list[str]) -> None:
-        self.__grabber = grabber
+# class ValuesSearch:
+#     def __init__(self, grabber: dict, items: list[str]) -> None:
+#         self.__grabber = grabber
         
-        self.__items = items
+#         self.__items = items
         
-        self.__create()
+#         self.__create()
         
-    def __create(self) -> None:
-        self.__grabber["search_entry"] = QComboBox()
-        self.__grabber["search_entry"].addItems(self.__items)
+#     def __create(self) -> None:
+#         self.__grabber["search_entry"] = QComboBox()
+#         self.__grabber["search_entry"].addItems(self.__items)
         
-        self.__grabber["search_edit"] = QLineEdit()
-        self.__grabber["search_edit"].setPlaceholderText("Search")
+#         self.__grabber["search_edit"] = QLineEdit()
+#         self.__grabber["search_edit"].setPlaceholderText("Search")
         
-        self.__grabber["search_btn"] = QPushButton("Search")
+#         self.__grabber["search_btn"] = QPushButton("Search")
         
-    def _addSearch(self, layout: QLayout) -> None:
-        self.__layout = layout
+#     def _addSearch(self, layout: QLayout) -> None:
+#         self.__layout = layout
         
-        self.__layout.addWidget(self.__grabber["search_entry"])
-        self.__layout.addWidget(self.__grabber["search_edit"])
-        self.__layout.addWidget(self.__grabber["search_btn"])
+#         self.__layout.addWidget(self.__grabber["search_entry"])
+#         self.__layout.addWidget(self.__grabber["search_edit"])
+#         self.__layout.addWidget(self.__grabber["search_btn"])
         
 class ValuesDescr:
     def __init__(self, grabber: dict, items: list[str]) -> None:
@@ -98,7 +98,7 @@ class ValuesLine:
         self.__logical_address_label = QLabel(self.__logical_address)
         self.__logical_address_label.setFixedSize(75, 20)
         
-        if self.__group == c.NAME_1 or self.__group == c.NAME_2:
+        if self.__group == c.NAME_1 or self.__group == c.NAME_4:
             self.__grabber[f"value_edit_{self.__id}"] = QLineEdit(self.__value)
             self.__grabber[f"value_edit_{self.__id}"].setFixedSize(100, 20)
         else:
@@ -119,7 +119,7 @@ class ValuesLine:
         self.__physical_address_label.setText(str(data["physical_address"]))
         self.__logical_address_label.setText(str(data["logical_address"]))
         
-        if self.__group == c.NAME_1 or self.__group == c.NAME_2:
+        if self.__group == c.NAME_1 or self.__group == c.NAME_4:
             self.__grabber[f"value_edit_{self.__id}"].setText(str(data["value"]))
         else:
             self.__value_label.setText(str(data["value"]))
@@ -128,22 +128,12 @@ class ValuesLine:
         self.__grabber[f"descr_edit_{self.__id}"].setText(str(data["description"]))
         self.__grabber[f"note_edit_{self.__id}"].setText(str(data["notes"]))
         
-    def _getLineData(self, data) -> None:
-        # data = {
-        #     "group": [],
-        #     "physical_address": [],
-        #     "logical_address": [],
-        #     "value": [],
-        #     "name": [],
-        #     "description": [],
-        #     "notes": []
-        # }
-        
+    def _getLineData(self, data) -> None:  
         data["group"].append(self.__group_label.text())
         data["physical_address"].append(self.__physical_address_label.text())
         data["logical_address"].append(self.__logical_address_label.text())
         
-        if self.__group == c.NAME_1 or self.__group == c.NAME_2:
+        if self.__group == c.NAME_1 or self.__group == c.NAME_4:
             data["value"].append(self.__grabber[f"value_edit_{self.__id}"].text())
         else:
             data["value"].append(self.__value_label.text())
@@ -163,7 +153,7 @@ class ValuesLine:
         self.__layout.addWidget(self.__physical_address_label, self.__row, 1)
         self.__layout.addWidget(self.__logical_address_label, self.__row, 2)
         
-        if self.__group == c.NAME_1 or self.__group == c.NAME_2:
+        if self.__group == c.NAME_1 or self.__group == c.NAME_4:
             self.__layout.addWidget(self.__grabber[f"value_edit_{self.__id}"], self.__row, 3)
         else:
             self.__layout.addWidget(self.__value_label, self.__row, 3)
@@ -177,7 +167,7 @@ class ValuesLine:
         self.__layout.removeWidget(self.__physical_address_label)
         self.__layout.removeWidget(self.__logical_address_label)
         
-        if self.__group == c.NAME_1 or self.__group == c.NAME_2:
+        if self.__group == c.NAME_1 or self.__group == c.NAME_4:
             self.__layout.removeWidget(self.__grabber[f"value_edit_{self.__id}"])
         else:
             self.__layout.removeWidget(self.__value_label)
@@ -190,7 +180,7 @@ class ValuesLine:
         self.__physical_address_label.deleteLater()
         self.__logical_address_label.deleteLater()
         
-        if self.__group == c.NAME_1 or self.__group == c.NAME_2:
+        if self.__group == c.NAME_1 or self.__group == c.NAME_4:
             self.__grabber[f"value_edit_{self.__id}"].deleteLater()
         else:
             self.__value_label.deleteLater()
@@ -267,13 +257,13 @@ class ValuesGroup:
         self.__scroll_area = QScrollArea()
         self.__scroll_area.setWidgetResizable(True)
         
-        self.__search_layout = QHBoxLayout()
+        # self.__search_layout = QHBoxLayout()
         self.__descr_layout = QHBoxLayout()
         
         self.__grid_container = QWidget()
         self.__grid_layout = QGridLayout(self.__grid_container)
         
-        self.__search = ValuesSearch(self.__grabber, c.ITEMS)
+        # self.__search = ValuesSearch(self.__grabber, c.ITEMS)
         self.__descr = ValuesDescr(self.__grabber, c.ITEMS)
         self.__grid = ValuesGrid(self.__grabber)
         
@@ -300,7 +290,7 @@ class ValuesGroup:
     def addGroup(self, layout: QLayout) -> None:
         self.__layout = layout
         
-        self.__search._addSearch(self.__search_layout)
+        # self.__search._addSearch(self.__search_layout)
         self.__descr._addDescr(self.__descr_layout)
         self.__grid._addGrid(self.__grid_layout)
         
@@ -309,7 +299,7 @@ class ValuesGroup:
         self._addLayout()
         
     def _addLayout(self) -> None:
-        self.__layout.addLayout(self.__search_layout)
+        # self.__layout.addLayout(self.__search_layout)
         self.__layout.addLayout(self.__descr_layout)
         
         self.__layout.addWidget(self.__scroll_area)

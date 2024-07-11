@@ -22,10 +22,10 @@ class Window(QMainWindow):
         
         self.__toolbar = ToolBar(self.grabber, self)
         self.__menubar = MenuBar(self.grabber, self)
-        self.__commgroup = CommGroup(self.grabber)
+        self.commgroup = CommGroup(self.grabber)
         self.valuesgroup = ValuesGroup(self.grabber)
         
-        self.__commgroup.addGroup(self.__comm_layout)
+        self.commgroup.addGroup(self.__comm_layout)
         self.valuesgroup.addGroup(self.__values_layout)
         
         self.__page_layout.addLayout(self.__comm_layout)

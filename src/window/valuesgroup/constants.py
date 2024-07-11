@@ -1,7 +1,7 @@
 NAME_1 = "Coil"
-NAME_2 = "Discrete Input"
-NAME_3 = "Input Register"
-NAME_4 = "Holding Register"
+NAME_2 = "Discrete input"
+NAME_3 = "Input register"
+NAME_4 = "Holding register"
 
 SEARCH_POSITION = 0
 DESCR_POSITION = 1

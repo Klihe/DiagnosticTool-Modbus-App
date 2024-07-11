@@ -15,8 +15,6 @@ def main() -> None:
     ports = Ports()
     data = Data()
     
-    read_from = "device"     
-    
     def port_refresh() -> None:
         ports.find_ports()
         window.grabber["port_option"].clear()
@@ -24,13 +22,16 @@ def main() -> None:
             
     def connect() -> None:
         if not device.is_connected:
+            data = window.commgroup.get()
+            print(data)
+            
             device.connect(
-                method=window.grabber["method_option"].currentText(),
-                port=window.grabber["port_option"].currentText(),
-                baudrate=int(window.grabber["baudrate_option"].currentText()),
-                bytesize=int(window.grabber["byte size_option"].currentText()),
-                parity=window.grabber["parity_option"].currentText(),
-                stopbits=int(window.grabber["stop bits_option"].currentText())
+                method=str(data["method"]),
+                port=str(data["port"]),
+                baudrate=int(data["baudrate"]),
+                bytesize=int(data["bytesize"]),
+                parity=str(data["parity"]),
+                stopbits=int(data["stopbits"])
             )
         
     def disconnect() -> None:
@@ -38,14 +39,18 @@ def main() -> None:
             device.disconnect()
         
     def read() -> None:
-        if window.grabber["ReadFromDevice"].isChecked():
+        print("read")
+        if device.is_connected:
             device.read()
             window.valuesgroup.update(device.data)
-        elif window.grabber["ReadFromCSV"].isChecked():
-            data.read("bin/data0.csv")
-            window.valuesgroup.update(data.data)
-        else:
-            return
+        # if window.grabber["ReadFromDevice"].isChecked():
+        #     device.read()
+        #     window.valuesgroup.update(device.data)
+        # elif window.grabber["ReadFromCSV"].isChecked():
+        #     data.read("bin/data0.csv")
+        #     window.valuesgroup.update(data.data)
+        # else:
+        #     return
         
     def readInInterval(checked) -> None:
         if checked:
@@ -58,22 +63,40 @@ def main() -> None:
         return None
     
     def write() -> None:
-        if window.grabber["WriteToDevice"].isChecked():
-            temp = window.valuesgroup.get()
-            device.write(temp)
-        elif window.grabber["WriteToCSV"].isChecked():
-            temp = window.valuesgroup.get()
-            data.write('bin/wData.csv', temp)
-        else:
-            return
+        temp = window.valuesgroup.get()
+        device.write(temp)
+        # if window.grabber["WriteToDevice"].isChecked():
+        #     temp = window.valuesgroup.get()
+        #     device.write(temp)
+        # elif window.grabber["WriteToCSV"].isChecked():
+        #     temp = window.valuesgroup.get()
+        #     data.write('bin/wData.csv', temp)
+        # else:
+        #     return
+        
+    def save() -> None:
+        temp = window.valuesgroup.get()
+        print(temp)
+        data.save(temp, window)
+        
+    def saveas() -> None:
+        temp = window.valuesgroup.get()
+        data.saveas(temp, window)
+        
+    def open() -> None:
+        data.load(window)
+        window.valuesgroup.update(data.data)
         
 
     window.grabber["port_refresh"].clicked.connect(port_refresh)
-    window.grabber["Connect"].triggered.connect(connect)
-    window.grabber["Disconnect"].triggered.connect(disconnect)
+    window.grabber["connect"].triggered.connect(connect)
+    window.grabber["disconnect"].triggered.connect(disconnect)
     window.grabber["read"].triggered.connect(read)
     window.grabber["ReadInInterval_action"].toggled.connect(readInInterval)
     window.grabber["write"].triggered.connect(write)
+    window.grabber["save"].triggered.connect(save)
+    window.grabber["saveas"].triggered.connect(saveas)
+    window.grabber["open"].triggered.connect(open)
     
     window.show()
     app.exec()

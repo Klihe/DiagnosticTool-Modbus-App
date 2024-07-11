@@ -30,6 +30,16 @@ class CommLine:
 
         if self.__refresh:
             self.__grabber[f"{self.__mark}_refresh"] = QPushButton("Refresh")
+    
+    def _get(self) -> str:
+        data = ""
+        
+        if self.__grabber[f"{self.__mark}_custom_swt"].isChecked():
+            data = self.__grabber[f"{self.__mark}_custom_opt"].text()
+        else:
+            data = self.__grabber[f"{self.__mark}_option"].currentText()
+            
+        return data
             
     def _addLine(self, layout: QLayout, row: int) -> None:
         self.__layout = layout
@@ -63,6 +73,18 @@ class CommGroup:
         self.__bytesize = CommLine(grabber, descr="Byte Size", options=c.BYTESIZE_OPTIONS)
         self.__parity = CommLine(grabber, descr="Parity", options=c.PARITY_OPTIONS)
         self.__stopbits = CommLine(grabber, descr="Stop Bits", options=c.STOPBITS_OPTIONS)
+        
+    def get(self) -> dict:
+        data = {
+            "method": self.__method._get(),
+            "port": self.__port._get(),
+            "baudrate": self.__baudrate._get(),
+            "bytesize": self.__bytesize._get(),
+            "parity": self.__parity._get(),
+            "stopbits": self.__stopbits._get()
+        }
+        
+        return data
         
     def addGroup(self, layout: QLayout) -> None:
         self.__method._addLine(layout=layout, row=0)

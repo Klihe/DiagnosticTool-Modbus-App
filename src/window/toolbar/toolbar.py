@@ -14,23 +14,17 @@ class ToolBar:
         self.__toolbar = QToolBar()
         self.__window.addToolBar(self.__toolbar)
         
-        self.__action_group1 = ActionGroup(self.__grabber, self.__toolbar, self.__window)
-        self.__action_group1.addAction("Connect")
-        self.__action_group1.addAction("Disconnect")
+        self.__grabber["connect"] = QAction("Connect", self.__window)
+        self.__toolbar.addAction(self.__grabber["connect"])
         
-        self.__action_group2 = ActionGroup(self.__grabber, self.__toolbar, self.__window)
-        self.__action_group2.addAction("ReadFromDevice")
-        self.__action_group2.addAction("ReadFromCSV")
+        self.__grabber["disconnect"] = QAction("Disconnect", self.__window)
+        self.__toolbar.addAction(self.__grabber["disconnect"])
         
         self.__grabber["read"] = QAction("Read", self.__window)
         self.__toolbar.addAction(self.__grabber["read"])
         
         self.__value_button = ValueButton(self.__grabber, "ReadInInterval", self.__window)
         self.__value_button.addAction(self.__toolbar)
-        
-        self.__action_group3 = ActionGroup(self.__grabber, self.__toolbar, self.__window)
-        self.__action_group3.addAction("WriteToDevice")
-        self.__action_group3.addAction("WriteToCSV")
         
         self.__grabber["write"] = QAction("Write", self.__window)
         self.__toolbar.addAction(self.__grabber["write"])

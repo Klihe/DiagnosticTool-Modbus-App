@@ -7,6 +7,11 @@ class Device:
     def _create(self) -> None:
         self.__client = None
         
+        self.__num_coils = 0
+        self.__num_discrete_inputs = 0
+        self.__num_input_registers = 0
+        self.__num_holding_registers = 0
+        
         self.data = {
             "group": [],
             "physical_address": [],
@@ -16,6 +21,7 @@ class Device:
             "description": [],
             "notes": [] 
         }
+        
         self.is_connected = False
         
     def _clear_data(self) -> None:
@@ -45,7 +51,7 @@ class Device:
         )
 
         self.is_connected = True
-        self.__client.connect()
+        print(self.__client.connect())
     
     def disconnect(self) -> None:
         self.is_connected = False
@@ -72,6 +78,8 @@ class Device:
                 name = "None"
                 description = "None"
                 notes = "None"
+                
+                self.__num_coils += 1
                 
             except Exception as e:
                 print(f"Exception occurred: {e}")
@@ -107,6 +115,8 @@ class Device:
                 description = "None"
                 notes = "None"
                 
+                self.__num_discrete_inputs += 1
+                
             except Exception as e:
                 print(f"Exception occurred: {e}")
                 break
@@ -140,6 +150,8 @@ class Device:
                 name = "None"
                 description = "None"
                 notes = "None"
+                
+                self.__num_input_registers += 1
             
             except Exception as e:
                 print(f"Exception occurred: {e}")
@@ -175,6 +187,8 @@ class Device:
                 description = "None"
                 notes = "None"
                 
+                self.__num_holding_registers += 1
+                
             except Exception as e:
                 print(f"Exception occurred: {e}")
                 break
@@ -191,5 +205,26 @@ class Device:
             address += 1
             
     def write(self, data: dict) -> None:
-        pass
-    
+        print(data)
+        
+        for i in range(len(data["group"])):
+            if data["group"][i] == "Coil":
+                if str(data["value"][i]) == "True":
+                    data["value"][i] = True
+                elif str(data["value"][i]) == "False":
+                    data["value"][i] = False
+                else:
+                    continue
+                    
+                self.__client.write_coil(
+                    address=int(data["physical_address"][i]),
+                    value=data["value"][i],
+                    unit=1
+                )
+                
+            elif data["group"][i] == "Holding register":
+                self.__client.write_register(
+                    address=int(data["physical_address"][i]),
+                    value=int(data["value"][i]),
+                    unit=1
+                )
