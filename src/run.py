@@ -1,4 +1,5 @@
 from PyQt6.QtWidgets import QApplication
+from PyQt6.QtCore import QThread, pyqtSignal
 
 from window.window import Window
 from device.device import Device
@@ -6,6 +7,20 @@ from ports.ports import Ports
 from data.data import Data
 
 import sys
+
+class WorkerThread(QThread):
+    finished = pyqtSignal(int)
+
+    def __init__(self, target=None, args=(), kwargs={}, *, daemon=None):
+        super().__init__()
+        self._target = target
+        self._args = args
+        self._kwargs = kwargs
+        self._daemon = daemon
+
+    def run(self):
+        result = self._target(*self._args, **self._kwargs)
+        self.finished.emit(result)
 
 def main() -> None:
     app  = QApplication(sys.argv)

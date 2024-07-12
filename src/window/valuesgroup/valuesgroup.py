@@ -173,6 +173,7 @@ class ValuesGrid:
         self.__holding_register_lines = []
             
     def _updateGrid(self, data: dict, from_device: bool) -> None:
+        index = 0
         
         for i in range(len(data["group"])):
             if data["group"][i] == c.NAME_1:
@@ -199,6 +200,8 @@ class ValuesGrid:
                         notes=str(data["notes"][i]),
                         id=i
                     ))
+                    
+                
             elif data["group"][i] == c.NAME_2:
                 if len(self.__discrete_input_lines) + len(self.__coils_lines) > i:
                     self.__discrete_input_lines[i - len(self.__coils_lines)]._updateLine(
