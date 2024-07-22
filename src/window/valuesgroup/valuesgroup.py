@@ -2,6 +2,7 @@ from PyQt6.QtWidgets import QLabel, QLineEdit, QGridLayout, QHBoxLayout, QScroll
 
 import window.valuesgroup.constants as c
 
+# Class for values description - only labels
 class ValuesDescr:
     def __init__(self, grabber: dict, items: list[str]) -> None:
         self.__grabber = grabber
@@ -49,6 +50,7 @@ class ValuesDescr:
         self.__layout.addWidget(self.__grabber["value_descr_item6"])
         self.__layout.addWidget(self.__grabber["value_descr_item7"])
         
+# ValueLine class - line with values
 class ValuesLine:
     def __init__(self, grabber: dict, group: str, physical_address: str, logical_address: str, value: str, name: str, description: str, notes: str, id: int) -> None:
         self.__grabber = grabber
@@ -63,7 +65,8 @@ class ValuesLine:
         self.__id = id
         
         self.__create()
-        
+    
+    # Create the line
     def __create(self) -> None:
         self.__group_label = QLabel(self.__group)
         self.__group_label.setFixedSize(100, 20)
@@ -74,6 +77,7 @@ class ValuesLine:
         self.__logical_address_label = QLabel(self.__logical_address)
         self.__logical_address_label.setFixedSize(75, 20)
         
+        # Check if the group is NAME_1 or NAME_4 - if yes, create QLineEdit, else QLabel
         if self.__group == c.NAME_1 or self.__group == c.NAME_4:
             self.__grabber[f"value_edit_{self.__id}"] = QLineEdit(self.__value)
             self.__grabber[f"value_edit_{self.__id}"].setFixedSize(100, 20)
@@ -89,7 +93,8 @@ class ValuesLine:
         
         self.__grabber[f"note_edit_{self.__id}"] = QLineEdit(self.__notes)
         self.__grabber[f"note_edit_{self.__id}"].setFixedSize(150, 20)
-        
+    
+    # Update the line
     def _updateLine(self, from_device: bool, group: str, physical_address: str, logical_address: str, value: str, name: str, descr: str, note: str) -> None:
         if from_device:
             if self.__group == c.NAME_1 or self.__group == c.NAME_4:
@@ -100,7 +105,8 @@ class ValuesLine:
             self.__grabber[f"name_edit_{self.__id}"].setText(name)
             self.__grabber[f"descr_edit_{self.__id}"].setText(descr)
             self.__grabber[f"note_edit_{self.__id}"].setText(note)
-        
+            
+    # Get the data from the line   
     def _getLineData(self, data) -> None:  
         data["group"].append(self.__group_label.text())
         data["physical_address"].append(self.__physical_address_label.text())
@@ -117,7 +123,7 @@ class ValuesLine:
         
         return data
         
-    
+    # Add the line to the layout
     def _addLine(self, layout: QLayout, row: int) -> None:
         self.__layout = layout
         self.__row = row
@@ -126,6 +132,7 @@ class ValuesLine:
         self.__layout.addWidget(self.__physical_address_label, self.__row, 1)
         self.__layout.addWidget(self.__logical_address_label, self.__row, 2)
         
+        # Check if the group is NAME_1 or NAME_4 - if yes, add QLineEdit, else QLabel
         if self.__group == c.NAME_1 or self.__group == c.NAME_4:
             self.__layout.addWidget(self.__grabber[f"value_edit_{self.__id}"], self.__row, 3)
         else:
@@ -134,7 +141,8 @@ class ValuesLine:
         self.__layout.addWidget(self.__grabber[f"name_edit_{self.__id}"], self.__row, 4)
         self.__layout.addWidget(self.__grabber[f"descr_edit_{self.__id}"], self.__row, 5)
         self.__layout.addWidget(self.__grabber[f"note_edit_{self.__id}"], self.__row, 6)
-        
+    
+    # Delete the line    
     def __del__(self) -> None:
         self.__layout.removeWidget(self.__group_label)
         self.__layout.removeWidget(self.__physical_address_label)
@@ -161,120 +169,54 @@ class ValuesLine:
         self.__grabber[f"name_edit_{self.__id}"].deleteLater()
         self.__grabber[f"descr_edit_{self.__id}"].deleteLater()
         self.__grabber[f"note_edit_{self.__id}"].deleteLater()
-        
+
+# ValuesGrid class - grid with values      
 class ValuesGrid:
     def __init__(self, grabber: dict) -> None:
         self.__grabber = grabber
         
-        self.__lines = []
+        # Create the lists for each group
         self.__coils_lines = []
         self.__discrete_input_lines = []
         self.__input_register_lines = []
         self.__holding_register_lines = []
-            
+    
+    # Update the item    
+    def __update_item(self, data: dict, lines, from_device: bool, item_id: int) -> None:
+        for i in range(len(data["physical_address"])):
+            # if there already is a line, update it, else create a new one
+            if len(lines) > i:
+                lines[i]._updateLine(
+                    from_device=from_device,
+                    group=str(data["group"][i]),
+                    physical_address=str(data["physical_address"][i]),
+                    logical_address=str(data["logical_address"][i]),
+                    value=str(data["value"][i]),
+                    name=str(data["name"][i]),
+                    descr=str(data["description"][i]),
+                    note=str(data["notes"][i])
+                )
+            else:
+                lines.append(ValuesLine(
+                    grabber=self.__grabber,
+                    group=str(data["group"][i]),
+                    physical_address=str(data["physical_address"][i]),
+                    logical_address=str(data["logical_address"][i]),
+                    value=str(data["value"][i]),
+                    name=str(data["name"][i]),
+                    description=str(data["description"][i]),
+                    notes=str(data["notes"][i]),
+                    id=i + item_id
+                ))
+    
+    # Update the grid    
     def _updateGrid(self, data: dict, from_device: bool) -> None:
-        index = 0
-        
-        for i in range(len(data["group"])):
-            if data["group"][i] == c.NAME_1:
-                if len(self.__coils_lines) > i:
-                    self.__coils_lines[i]._updateLine(
-                        from_device=from_device,
-                        group=str(data["group"][i]),
-                        physical_address=str(data["physical_address"][i]),
-                        logical_address=str(data["logical_address"][i]),
-                        value=str(data["value"][i]),
-                        name=str(data["name"][i]),
-                        descr=str(data["description"][i]),
-                        note=str(data["notes"][i])
-                    )
-                else:
-                    self.__coils_lines.append(ValuesLine(
-                        grabber=self.__grabber,
-                        group=str(data["group"][i]),
-                        physical_address=str(data["physical_address"][i]),
-                        logical_address=str(data["logical_address"][i]),
-                        value=str(data["value"][i]),
-                        name=str(data["name"][i]),
-                        description=str(data["description"][i]),
-                        notes=str(data["notes"][i]),
-                        id=i
-                    ))
-                    
-                
-            elif data["group"][i] == c.NAME_2:
-                if len(self.__discrete_input_lines) + len(self.__coils_lines) > i:
-                    self.__discrete_input_lines[i - len(self.__coils_lines)]._updateLine(
-                        from_device=from_device,
-                        group=str(data["group"][i]),
-                        physical_address=str(data["physical_address"][i]),
-                        logical_address=str(data["logical_address"][i]),
-                        value=str(data["value"][i]),
-                        name=str(data["name"][i]),
-                        descr=str(data["description"][i]),
-                        note=str(data["notes"][i])
-                    )
-                else:
-                    self.__discrete_input_lines.append(ValuesLine(
-                        grabber=self.__grabber,
-                        group=str(data["group"][i]),
-                        physical_address=str(data["physical_address"][i]),
-                        logical_address=str(data["logical_address"][i]),
-                        value=str(data["value"][i]),
-                        name=str(data["name"][i]),
-                        description=str(data["description"][i]),
-                        notes=str(data["notes"][i]),
-                        id=i
-                    ))
-            elif data["group"][i] == c.NAME_3:
-                if len(self.__input_register_lines) + len(self.__discrete_input_lines) + len(self.__coils_lines) > i:
-                    self.__input_register_lines[i - len(self.__discrete_input_lines) - len(self.__coils_lines)]._updateLine(
-                        from_device=from_device,
-                        group=str(data["group"][i]),
-                        physical_address=str(data["physical_address"][i]),
-                        logical_address=str(data["logical_address"][i]),
-                        value=str(data["value"][i]),
-                        name=str(data["name"][i]),
-                        descr=str(data["description"][i]),
-                        note=str(data["notes"][i])
-                    )
-                else:
-                    self.__input_register_lines.append(ValuesLine(
-                        grabber=self.__grabber,
-                        group=str(data["group"][i]),
-                        physical_address=str(data["physical_address"][i]),
-                        logical_address=str(data["logical_address"][i]),
-                        value=str(data["value"][i]),
-                        name=str(data["name"][i]),
-                        description=str(data["description"][i]),
-                        notes=str(data["notes"][i]),
-                        id=i
-                    ))
-            elif data["group"][i] == c.NAME_4:
-                if len(self.__holding_register_lines) + len(self.__input_register_lines) + len(self.__discrete_input_lines) + len(self.__coils_lines) > i:
-                    self.__holding_register_lines[i - len(self.__input_register_lines) - len(self.__discrete_input_lines) - len(self.__coils_lines)]._updateLine(
-                        from_device=from_device,
-                        group=str(data["group"][i]),
-                        physical_address=str(data["physical_address"][i]),
-                        logical_address=str(data["logical_address"][i]),
-                        value=str(data["value"][i]),
-                        name=str(data["name"][i]),
-                        descr=str(data["description"][i]),
-                        note=str(data["notes"][i])
-                    )
-                else:
-                    self.__holding_register_lines.append(ValuesLine(
-                        grabber=self.__grabber,
-                        group=str(data["group"][i]),
-                        physical_address=str(data["physical_address"][i]),
-                        logical_address=str(data["logical_address"][i]),
-                        value=str(data["value"][i]),
-                        name=str(data["name"][i]),
-                        description=str(data["description"][i]),
-                        notes=str(data["notes"][i]),
-                        id=i
-                    ))
-            
+        self.__update_item(data["Coil"], self.__coils_lines, from_device, 0)
+        self.__update_item(data["Discrete input"], self.__discrete_input_lines, from_device, len(self.__coils_lines))
+        self.__update_item(data["Input register"], self.__input_register_lines, from_device, len(self.__discrete_input_lines) + len(self.__coils_lines))
+        self.__update_item(data["Holding register"], self.__holding_register_lines, from_device, len(self.__input_register_lines) + len(self.__discrete_input_lines) + len(self.__coils_lines))
+
+    # Get the data from the grid
     def _getGridData(self, data) -> None:
         for i in range(len(self.__coils_lines)):
             self.__coils_lines[i]._getLineData(data)
@@ -285,6 +227,7 @@ class ValuesGrid:
         for i in range(len(self.__holding_register_lines)):
             self.__holding_register_lines[i]._getLineData(data)
             
+    # Add the grid to the layout   
     def _addGrid(self, layout: QLayout) -> None:
         self.__layout = layout
         
@@ -296,35 +239,36 @@ class ValuesGrid:
             line._addLine(layout=self.__layout, row=row + len(self.__discrete_input_lines) + len(self.__coils_lines))
         for row, line in enumerate(self.__holding_register_lines):
             line._addLine(layout=self.__layout, row=row + len(self.__input_register_lines) + len(self.__discrete_input_lines) + len(self.__coils_lines))
-        
+
+# ValuesGroup class - group with values   
 class ValuesGroup:
     def __init__(self, grabber: dict) -> None:
         self.__grabber = grabber
         
         self.__create()
-        
+    
     def __create(self) -> None:
         self.__scroll_area = QScrollArea()
         self.__scroll_area.setWidgetResizable(True)
         
-        # self.__search_layout = QHBoxLayout()
         self.__descr_layout = QHBoxLayout()
         
         self.__grid_container = QWidget()
         self.__grid_layout = QGridLayout(self.__grid_container)
         
-        # self.__search = ValuesSearch(self.__grabber, c.ITEMS)
         self.__descr = ValuesDescr(self.__grabber, c.ITEMS)
         self.__grid = ValuesGrid(self.__grabber)
         
+    # Update the group
     def update(self, data: dict, from_device: bool) -> None:
         self.__grid._updateGrid(data, from_device=from_device)
         
         self.addGroup(self.__layout)
-        
+    
+    # Get the data from the group
     def get(self) -> dict:
         data = {
-            "group": [],
+            "group": [], 
             "physical_address": [],
             "logical_address": [],
             "value": [],
@@ -336,20 +280,20 @@ class ValuesGroup:
         self.__grid._getGridData(data)
         
         return data
-            
+    
+    # Add the group to the layout 
     def addGroup(self, layout: QLayout) -> None:
         self.__layout = layout
         
-        # self.__search._addSearch(self.__search_layout)
         self.__descr._addDescr(self.__descr_layout)
         self.__grid._addGrid(self.__grid_layout)
         
         self.__scroll_area.setWidget(self.__grid_container)
         
         self._addLayout()
-        
+    
+    # Add the layout  
     def _addLayout(self) -> None:
-        # self.__layout.addLayout(self.__search_layout)
         self.__layout.addLayout(self.__descr_layout)
         
         self.__layout.addWidget(self.__scroll_area)

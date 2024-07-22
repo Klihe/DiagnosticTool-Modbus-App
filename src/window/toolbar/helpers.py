@@ -1,17 +1,20 @@
 from PyQt6.QtWidgets import QWidget, QLineEdit, QHBoxLayout, QWidgetAction, QToolBar, QMainWindow
-from PyQt6.QtGui import QAction, QActionGroup, QIcon
+from PyQt6.QtGui import QAction
 from PyQt6.QtCore import QTimer
 
+# ValueButton class - state button with edit line
 class ValueButton:
     def __init__(self, grabber: dict, name: str, window: QMainWindow) -> None:
         self.__name = name
         self.__window = window
         self.__grabber = grabber
         
+        # Create the button
         self.__widget_action= QWidgetAction(window)
         self.__container = QWidget()
         self.__layout = QHBoxLayout()
         
+        # Create the button
         self.__grabber[f"{self.__name}_action"] = QAction(self.__name, self.__window)
         self.__grabber[f"{self.__name}_action"].setCheckable(True)
         self.__grabber[f"{self.__name}_edit"] = QLineEdit()
@@ -24,7 +27,8 @@ class ValueButton:
         
         self.__container.setLayout(self.__layout)
         self.__widget_action.setDefaultWidget(self.__container)
-        
+    
+    # Add the action to the toolbar
     def addAction(self, toolbar: QToolBar) -> None:
         self.__toolbar = toolbar
         

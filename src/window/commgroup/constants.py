@@ -1,6 +1,15 @@
+# Constants for the CommGroup class
+
+# For ComboBoxes
 METHOD_OPTIONS = ["RTU"]
 PORT_OPTIONS = ["None"]
 BAUDRATE_OPTIONS = ["9600", "19200", "38400", "57600", "115200"]
-BYTESIZE_OPTIONS = ["8"]
+BYTESIZE_OPTIONS = ["7", "8"]
 PARITY_OPTIONS = ["N", "E", "O"]
 STOPBITS_OPTIONS = ["1", "2"]
+
+# For Labels
+DESCRIPTION_WIDTH = 75
+OPTION_WIDTH = 150
+CUSTOM_WIDTH = 150
+BUTTON_WIDTH = 75
