@@ -72,7 +72,7 @@ def main() -> None:
                 return None
             # If there are available ports
             else:
-                window.commgroup.update_state("Ready", "green")
+                window.commgroup.update_state("Ports: Ready", "green")
                 return None
         
         # Set the function for the thread
@@ -109,9 +109,9 @@ def main() -> None:
         # Function for updating the state
         def connect_update_state():
             if device.is_connected:
-                window.commgroup.update_state("Ready", "green")
+                window.commgroup.update_state("Device: Ready", "green")
             else: 
-                window.commgroup.update_state("Disconnected", "red")
+                window.commgroup.update_state("Device: Disconnected", "red")
         
         # Set the function for the thread
         calc_thread.set_function(connect_thread)
@@ -125,13 +125,17 @@ def main() -> None:
         window.commgroup.update_state("Disconnecting...", "blue")
         
         # If the device is connected - disconnect
+        if device.is_connecting:
+            window.commgroup.update_state("Error: Device is connecting", "orange")
+            return None
         if device.is_connected:
             device.disconnect()
+            window.valuesgroup.clear()
         else:
             window.commgroup.update_state("Error: Non-connected device", "orange")
             return None
             
-        window.commgroup.update_state("Disconnected", "red")
+        window.commgroup.update_state("Device: Disconnected", "red")
     
     # Function for read button    
     def read() -> None:
@@ -187,10 +191,9 @@ def main() -> None:
             if device.is_connected:
                 temp = window.valuesgroup.get()
                 device.write(temp)
-                device.read()
 
         calc_thread.set_function(write_thread)
-        calc_thread.finished.connect(lambda: window.commgroup.update_state("Ready", "green"))
+        calc_thread.finished.connect(lambda: window.commgroup.update_state("Device: Ready", "green"))
         calc_thread.start()
     
     # Function for save button
@@ -198,33 +201,50 @@ def main() -> None:
         # When function is in progress
         window.commgroup.update_state("Saving...", "blue")
         
+        if not device.is_connected:
+            window.commgroup.update_state("Error: No data found in the table.", "orange")
+            return None
+        
         # Get data and save them
         temp = window.valuesgroup.get()
         data.save(temp, window)
         
-        window.commgroup.update_state("Ready", "green")
+        window.commgroup.update_state("Device: Ready", "green")
     
     # Function for save as button  
     def saveas() -> None:
         # When function is in progress
         window.commgroup.update_state("Saving as...", "blue")
         
+        if not device.is_connected:
+            window.commgroup.update_state("Error: No data found in the table", "orange")
+            return None
+        
         # Get data and save them
         temp = window.valuesgroup.get()
         data.saveas(temp, window)
         
-        window.commgroup.update_state("Ready", "green")
+        window.commgroup.update_state("Device: Ready", "green")
     
     # Function for open button
     def open() -> None:
         # When function is in progress
         window.commgroup.update_state("Opening...", "blue")
         
+        if not device.is_connected:
+            window.commgroup.update_state("Error: Table not prepared", "orange")
+            return None
+        
+        if device.table_is_imported:
+            window.commgroup.update_state("Error: Data already imported; reconnect device.", "orange")
+            return None
+        
         # Open the file and update the table
         data.open(window)
         window.valuesgroup.update(data.data, False)
+        device.table_is_imported = True
         
-        window.commgroup.update_state("Ready", "green")
+        window.commgroup.update_state("Device: Ready", "green")
     
     # Set the functions to the buttons
     window.grabber["port_refresh"].clicked.connect(port_refresh)

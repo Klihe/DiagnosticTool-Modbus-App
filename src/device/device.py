@@ -58,7 +58,9 @@ class Device:
         }
         
         # Connection status
+        self.is_connecting = True
         self.is_connected = False
+        self.table_is_imported = False
     
     # Clear the data    
     def _clear_data(self) -> None:
@@ -74,6 +76,8 @@ class Device:
         self.__bytesize = bytesize
         self.__parity = parity
         self.__stopbits = stopbits
+        
+        self.is_connecting = True
         
         # Create the client
         self.__client = ModbusSerialClient(
@@ -92,11 +96,15 @@ class Device:
         if self.is_connected:
             self.check_space()
             self.prepare_table()
+            self.read()
+            
+        self.is_connecting = False
     
     # Disconnect from the device
     def disconnect(self) -> None:
         self.__client.close()
         self.is_connected = False
+        self.table_is_imported = False
     
     # Read the data from the device - for find the number of items
     def __read_until_failure(self, read_method):
@@ -202,9 +210,9 @@ class Device:
             else:
                 self.data[name]["value"].append("0")
                 
-            self.data[name]["name"].append("None")
-            self.data[name]["description"].append("None")
-            self.data[name]["notes"].append("None")
+            self.data[name]["name"].append("nan")
+            self.data[name]["description"].append("nan")
+            self.data[name]["notes"].append("nan")
     
     # Read the data from the device
     def read(self) -> None:
@@ -300,3 +308,5 @@ class Device:
             self.__number_of_holding_registers,
             curr_data["Holding register"]
         )
+        
+        self.read()

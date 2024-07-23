@@ -143,7 +143,8 @@ class ValuesLine:
         self.__layout.addWidget(self.__grabber[f"note_edit_{self.__id}"], self.__row, 6)
     
     # Delete the line    
-    def __del__(self) -> None:
+    def _deleteLine(self) -> None:
+        print("Deleting line")
         self.__layout.removeWidget(self.__group_label)
         self.__layout.removeWidget(self.__physical_address_label)
         self.__layout.removeWidget(self.__logical_address_label)
@@ -239,7 +240,22 @@ class ValuesGrid:
             line._addLine(layout=self.__layout, row=row + len(self.__discrete_input_lines) + len(self.__coils_lines))
         for row, line in enumerate(self.__holding_register_lines):
             line._addLine(layout=self.__layout, row=row + len(self.__input_register_lines) + len(self.__discrete_input_lines) + len(self.__coils_lines))
-
+            
+    def _clearGrid(self) -> None:
+        for line in self.__coils_lines:
+            line._deleteLine()
+        for line in self.__discrete_input_lines:
+            line._deleteLine()
+        for line in self.__input_register_lines:
+            line._deleteLine()
+        for line in self.__holding_register_lines:
+            line._deleteLine()
+            
+        self.__coils_lines = []
+        self.__discrete_input_lines = []
+        self.__input_register_lines = []
+        self.__holding_register_lines = []
+        
 # ValuesGroup class - group with values   
 class ValuesGroup:
     def __init__(self, grabber: dict) -> None:
@@ -280,6 +296,9 @@ class ValuesGroup:
         self.__grid._getGridData(data)
         
         return data
+    
+    def clear(self) -> None:
+        self.__grid._clearGrid()
     
     # Add the group to the layout 
     def addGroup(self, layout: QLayout) -> None:
