@@ -144,7 +144,6 @@ class ValuesLine:
     
     # Delete the line    
     def _deleteLine(self) -> None:
-        print("Deleting line")
         self.__layout.removeWidget(self.__group_label)
         self.__layout.removeWidget(self.__physical_address_label)
         self.__layout.removeWidget(self.__logical_address_label)

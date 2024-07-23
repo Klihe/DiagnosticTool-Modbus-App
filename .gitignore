@@ -27,3 +27,5 @@ node_modules/
 .idea/
 *.sublime-project
 *.sublime-workspace
+
+.macOS
