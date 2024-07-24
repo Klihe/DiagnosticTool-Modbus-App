@@ -49,7 +49,10 @@ def main() -> None:
     ports = Ports()
     data = Data()
     
-    calc_thread = WorkerThread()
+    refresh_ports_thread = WorkerThread()
+    connect_thread = WorkerThread()
+    read_thread = WorkerThread()
+    write_thread = WorkerThread()
     
     global is_readingInInterval
     is_readingInInterval = False
@@ -86,9 +89,9 @@ def main() -> None:
                 return None
         
         # Set the function for the thread
-        calc_thread.set_function(refresh_ports)
-        calc_thread.finished.connect(refresh_ports_update_state)
-        calc_thread.start()
+        refresh_ports_thread.set_function(refresh_ports)
+        refresh_ports_thread.finished.connect(refresh_ports_update_state)
+        refresh_ports_thread.start()
             
     # Function for connect button
     def connect() -> None:
@@ -113,33 +116,33 @@ def main() -> None:
                 return None
         
         # Function for connecting the device
-        def connect_thread():
+        def connect_thread_func():
             if not device.is_connected:
                 device.connect(
-                    method=str(data["method"]),
-                    port=str(data["port"]),
-                    baudrate=int(data["baudrate"]),
-                    bytesize=int(data["bytesize"]),
-                    parity=str(data["parity"]),
-                    stopbits=int(data["stopbits"])
+                    method=data["method"],
+                    port=data["port"],
+                    baudrate=data["baudrate"],
+                    bytesize=data["bytesize"],
+                    parity=data["parity"],
+                    stopbits=data["stopbits"]
                 )
         
         # Function for updating the state
         def connect_update_state():
-            if not is_readingInInterval:
-                state_indicator("#0D825D")
-            window.grabber["connect_btn"].setStyleSheet("background-color: #D53734;")
-            
             if device.is_connected:
                 window.commgroup.update_state("Device: Ready", "#0D825D")
-            else: 
-                window.commgroup.update_state("Device: Disconnected", "#D53734")
-        
+                state_indicator("#0D825D")
+                window.grabber["connect_btn"].setStyleSheet("background-color: #D53734;")
+            if device.error is not None:
+                    window.commgroup.update_state(f"Error: {device.error}", "#FA9938")
+                    state_indicator("#D53734")
+                    window.grabber["connect_btn"].setStyleSheet("background-color: #0D825D;")
+                    
         # Set the function for the thread
-        calc_thread.set_function(connect_thread)
-        calc_thread.finished.connect(connect_update_state)
-        calc_thread.finished.connect(lambda: window.valuesgroup.update(device.data, True))
-        calc_thread.start()
+        connect_thread.set_function(connect_thread_func)
+        connect_thread.finished.connect(connect_update_state)
+        connect_thread.finished.connect(lambda: window.valuesgroup.update(device.data, True))
+        connect_thread.start()
     
     # Function for disconnect button   
     def disconnect() -> None:
@@ -183,7 +186,7 @@ def main() -> None:
             return None
         
         # Function for reading the data from the device
-        def read_thread():
+        def read_thread_func():
             if device.is_connected:
                 device.read()
                 
@@ -193,11 +196,11 @@ def main() -> None:
                 window.grabber["connect_btn"].setStyleSheet("background-color: #D53734;")
         
             window.commgroup.update_state("Ready", "#0D825D")
-                
-        calc_thread.set_function(read_thread)
-        calc_thread.finished.connect(lambda: window.valuesgroup.update(device.data, True))
-        calc_thread.finished.connect(read_update_state)
-        calc_thread.start()
+        
+        read_thread.set_function(read_thread_func)
+        read_thread.finished.connect(lambda: window.valuesgroup.update(device.data, True))
+        read_thread.finished.connect(read_update_state)
+        read_thread.start()
         
     # Function for read in interval action
     def readInInterval(checked) -> None:
@@ -216,7 +219,8 @@ def main() -> None:
             window.grabber["readInInterval_action_btn"].setStyleSheet("background-color: #FA9938;")
             window.grabber["readInInterval_timer"].start()
             # Set the interval - get time from the edit
-            window.grabber["readInInterval_timer"].setInterval(int(window.grabber["readInInterval_edit"].text()))
+            if int(window.grabber["readInInterval_edit"].text()) <= 1:
+                window.grabber["readInInterval_timer"].setInterval(int(window.grabber["readInInterval_edit"].text()))
             window.grabber["readInInterval_timer"].timeout.connect(read)
             window.grabber["read_btn"].disconnect()
         else:
@@ -247,7 +251,7 @@ def main() -> None:
             return None
         
         # Function for writing the data to the device
-        def write_thread():
+        def write_thread_func():
             # get values from table write them to the device and update table
             if device.is_connected:
                 temp = window.valuesgroup.get()
@@ -259,9 +263,9 @@ def main() -> None:
         
             window.commgroup.update_state("Device: Ready", "#0D825D")
 
-        calc_thread.set_function(write_thread)
-        calc_thread.finished.connect(write_update_state)
-        calc_thread.start()
+        write_thread.set_function(write_thread_func)
+        write_thread.finished.connect(write_update_state)
+        write_thread.start()
     
     # Function for save button
     def save() -> None:

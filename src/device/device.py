@@ -61,6 +61,7 @@ class Device:
         self.is_connecting = True
         self.is_connected = False
         self.table_is_imported = False
+        self.error = None
     
     # Clear the data    
     def _clear_data(self) -> None:
@@ -70,12 +71,22 @@ class Device:
     
     # Connect to the device
     def connect(self, method, port, baudrate, bytesize, parity, stopbits) -> None:
+        if not baudrate.isdigit():
+            self.error = "Baudrate must be a number"
+            return None
+        elif not bytesize.isdigit():
+            self.error = "Byte Size must be a number"
+            return None
+        elif not stopbits.isdigit():
+            self.error = "Stop Bits must be a number"
+            return None
+        
         self.__method = method
         self.__port = port
-        self.__baudrate = baudrate
-        self.__bytesize = bytesize
+        self.__baudrate = int(baudrate)
+        self.__bytesize = int(bytesize)
         self.__parity = parity
-        self.__stopbits = stopbits
+        self.__stopbits = int(stopbits)
         
         self.is_connecting = True
         
