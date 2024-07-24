@@ -51,10 +51,20 @@ def main() -> None:
     
     calc_thread = WorkerThread()
     
+    global is_readingInInterval
+    is_readingInInterval = False
+    
+    def state_indicator(color: str) -> None:
+        window.grabber["connect_btn"].setStyleSheet(f"background-color: {color};")
+        window.grabber["disconnect_btn"].setStyleSheet(f"background-color: {color};")
+        window.grabber["read_btn"].setStyleSheet(f"background-color: {color};")
+        window.grabber["write_btn"].setStyleSheet(f"background-color: {color};")
+        window.grabber["readInInterval_action_btn"].setStyleSheet(f"background-color: {color};")
+    
     # For refresh button in the port line
     def port_refresh() -> None:
         # When function is in progress
-        window.commgroup.update_state("Searching for ports...", "blue")
+        window.commgroup.update_state("Searching for ports...", "#2D4EB0")
         
         # Function for refreshing the ports
         def refresh_ports():
@@ -68,11 +78,11 @@ def main() -> None:
         def refresh_ports_update_state():
             # If there are no available ports
             if ports.available_ports == []:
-                window.commgroup.update_state("Error: No ports found", "orange")
+                window.commgroup.update_state("Error: No ports found", "#FA9938")
                 return None
             # If there are available ports
             else:
-                window.commgroup.update_state("Ports: Ready", "green")
+                window.commgroup.update_state("Ports: Ready", "#0D825D")
                 return None
         
         # Set the function for the thread
@@ -82,8 +92,12 @@ def main() -> None:
             
     # Function for connect button
     def connect() -> None:
+        global is_readingInInterval
+        state_indicator("#D53734")
+        window.grabber["connect_btn"].setStyleSheet("background-color: #FA9938;")
+        
         # When function is in progress
-        window.commgroup.update_state("Connecting...", "blue")
+        window.commgroup.update_state("Connecting...", "#2D4EB0")
         
         # Get the data from the commgroup
         if not device.is_connected:
@@ -91,7 +105,7 @@ def main() -> None:
 
             # Check if the port is selected
             if data["port"] == '':
-                window.commgroup.update_state("Error: Port isn't selected", "orange")
+                window.commgroup.update_state("Error: Port isn't selected", "#FA9938")
                 return None
         
         # Function for connecting the device
@@ -108,10 +122,14 @@ def main() -> None:
         
         # Function for updating the state
         def connect_update_state():
+            if not is_readingInInterval:
+                state_indicator("#0D825D")
+            window.grabber["connect_btn"].setStyleSheet("background-color: #D53734;")
+            
             if device.is_connected:
-                window.commgroup.update_state("Device: Ready", "green")
+                window.commgroup.update_state("Device: Ready", "#0D825D")
             else: 
-                window.commgroup.update_state("Device: Disconnected", "red")
+                window.commgroup.update_state("Device: Disconnected", "#D53734")
         
         # Set the function for the thread
         calc_thread.set_function(connect_thread)
@@ -121,30 +139,45 @@ def main() -> None:
     
     # Function for disconnect button   
     def disconnect() -> None:
+        global is_readingInInterval
+        
+        state_indicator("#D53734")
+        window.grabber["disconnect_btn"].setStyleSheet("background-color: #FA9938;")
+        
         # When function is in progress
-        window.commgroup.update_state("Disconnecting...", "blue")
+        window.commgroup.update_state("Disconnecting...", "#2D4EB0")
         
         # If the device is connected - disconnect
+        if is_readingInInterval:
+            return None
         if device.is_connecting:
-            window.commgroup.update_state("Error: Device is connecting", "orange")
+            window.commgroup.update_state("Error: Device is connecting", "#FA9938")
             return None
         if device.is_connected:
             device.disconnect()
             window.valuesgroup.clear()
         else:
-            window.commgroup.update_state("Error: Non-connected device", "orange")
+            window.commgroup.update_state("Error: Non-connected device", "#FA9938")
             return None
-            
-        window.commgroup.update_state("Device: Disconnected", "red")
+        
+        state_indicator("#D53734")
+        window.grabber["connect_btn"].setStyleSheet("background-color: #0D825D;")
+        
+        window.commgroup.update_state("Device: Disconnected", "#D53734")
     
     # Function for read button    
     def read() -> None:
+        global is_readingInInterval
         # When function is in progress
-        window.commgroup.update_state("Reading...", "blue")
+        if not is_readingInInterval:
+            state_indicator("#D53734")
+            window.grabber["read_btn"].setStyleSheet("background-color: #FA9938;")
+        
+        window.commgroup.update_state("Reading...", "#2D4EB0")
         
         # If the device isn't connected - Error
         if not device.is_connected:
-            window.commgroup.update_state("Error: Non-connected device", "orange")
+            window.commgroup.update_state("Error: Non-connected device", "#FA9938")
             return None
         
         # Function for reading the data from the device
@@ -152,37 +185,61 @@ def main() -> None:
             if device.is_connected:
                 device.read()
                 
+        def read_update_state():
+            if not is_readingInInterval:
+                state_indicator("#0D825D")
+                window.grabber["connect_btn"].setStyleSheet("background-color: #D53734;")
+        
+            window.commgroup.update_state("Ready", "#0D825D")
+                
         calc_thread.set_function(read_thread)
         calc_thread.finished.connect(lambda: window.valuesgroup.update(device.data, True))
-        calc_thread.finished.connect(lambda: window.commgroup.update_state("Ready", "green"))
+        calc_thread.finished.connect(read_update_state)
         calc_thread.start()
         
     # Function for read in interval action
     def readInInterval(checked) -> None:
+        global is_readingInInterval
         # When device isn't connected - Error
         if not device.is_connected:
-            window.commgroup.update_state("Error: Non-connected device", "orange")
+            window.commgroup.update_state("Error: Non-connected device", "#FA9938")
             return None
         
         # If button is checked - start the timer
         if checked:
+            is_readingInInterval = True
+            state_indicator("#D53734")
+            window.grabber["readInInterval_action_btn"].setStyleSheet("background-color: #FA9938;")
             window.grabber["readInInterval_timer"].start()
             # Set the interval - get time from the edit
             window.grabber["readInInterval_timer"].setInterval(int(window.grabber["readInInterval_edit"].text()))
             window.grabber["readInInterval_timer"].timeout.connect(read)
+            window.grabber["read_btn"].disconnect()
         else:
+            is_readingInInterval = False
+            state_indicator("#0D825D")
+            window.grabber["connect_btn"].setStyleSheet("background-color: #D53734;")
             window.grabber["readInInterval_timer"].stop()
             window.grabber["readInInterval_timer"].timeout.disconnect(read)
+            window.grabber["read_btn"].triggered.connect(read)
         return None
     
     # Function for write button
     def write() -> None:
+        global is_readingInInterval
+        
+        if is_readingInInterval:
+            return None
+        
         # When function is in progress
-        window.commgroup.update_state("Writing...", "blue")
+        window.commgroup.update_state("Writing...", "#2D4EB0")
+        
+        state_indicator("#D53734")
+        window.grabber["write_btn"].setStyleSheet("background-color: #FA9938;")
         
         # If the device isn't connected - Error
         if not device.is_connected:
-            window.commgroup.update_state("Error: Non-connected device", "orange")
+            window.commgroup.update_state("Error: Non-connected device", "#FA9938")
             return None
         
         # Function for writing the data to the device
@@ -191,60 +248,66 @@ def main() -> None:
             if device.is_connected:
                 temp = window.valuesgroup.get()
                 device.write(temp)
+                
+        def write_update_state():
+            state_indicator("#0D825D")
+            window.grabber["connect_btn"].setStyleSheet("background-color: #D53734;")
+        
+            window.commgroup.update_state("Device: Ready", "#0D825D")
 
         calc_thread.set_function(write_thread)
-        calc_thread.finished.connect(lambda: window.commgroup.update_state("Device: Ready", "green"))
+        calc_thread.finished.connect(write_update_state)
         calc_thread.start()
     
     # Function for save button
     def save() -> None:
         # When function is in progress
-        window.commgroup.update_state("Saving...", "blue")
+        window.commgroup.update_state("Saving...", "#2D4EB0")
         
         if not device.is_connected:
-            window.commgroup.update_state("Error: No data found in the table.", "orange")
+            window.commgroup.update_state("Error: No data found in the table.", "#FA9938")
             return None
         
         # Get data and save them
         temp = window.valuesgroup.get()
         data.save(temp, window)
         
-        window.commgroup.update_state("Device: Ready", "green")
+        window.commgroup.update_state("Device: Ready", "#0D825D")
     
     # Function for save as button  
     def saveas() -> None:
         # When function is in progress
-        window.commgroup.update_state("Saving as...", "blue")
+        window.commgroup.update_state("Saving as...", "#2D4EB0")
         
         if not device.is_connected:
-            window.commgroup.update_state("Error: No data found in the table", "orange")
+            window.commgroup.update_state("Error: No data found in the table", "#FA9938")
             return None
         
         # Get data and save them
         temp = window.valuesgroup.get()
         data.saveas(temp, window)
         
-        window.commgroup.update_state("Device: Ready", "green")
+        window.commgroup.update_state("Device: Ready", "#0D825D")
     
     # Function for open button
     def open() -> None:
         # When function is in progress
-        window.commgroup.update_state("Opening...", "blue")
+        window.commgroup.update_state("Opening...", "#2D4EB0")
         
         if not device.is_connected:
-            window.commgroup.update_state("Error: Table not prepared", "orange")
+            window.commgroup.update_state("Error: Table not prepared", "#FA9938")
             return None
         
         if device.table_is_imported:
-            window.commgroup.update_state("Error: Data already imported; reconnect device.", "orange")
+            window.commgroup.update_state("Error: Data already imported; reconnect device.", "#FA9938")
             return None
         
         # Open the file and update the table
-        data.open(window)
+        device.table_is_imported = data.open(window)
         window.valuesgroup.update(data.data, False)
-        device.table_is_imported = True
+        window.setWindowTitle(f"{window.windowTitle()} - {data.current_file_path}")
         
-        window.commgroup.update_state("Device: Ready", "green")
+        window.commgroup.update_state("Device: Ready", "#0D825D")
     
     # Set the functions to the buttons
     window.grabber["port_refresh"].clicked.connect(port_refresh)

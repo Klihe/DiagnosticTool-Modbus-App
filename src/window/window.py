@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QMainWindow, QHBoxLayout, QVBoxLayout, QGridLayout, QWidget
+from PyQt6.QtWidgets import QMainWindow, QHBoxLayout, QVBoxLayout, QGridLayout, QWidget, QMessageBox
 
 from window.toolbar.toolbar import ToolBar
 from window.menubar.menubar import MenuBar
@@ -41,3 +41,14 @@ class Window(QMainWindow):
         self.__widget = QWidget()
         self.__widget.setLayout(self.__page_layout)
         self.setCentralWidget(self.__widget)
+        
+    def closeEvent(self, event):
+        # Show a message box to confirm exit
+        reply = QMessageBox.question(self, 'Quit Confirmation',
+                                     "Are you sure you want to quit?",
+                                     QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No, QMessageBox.StandardButton.No)
+
+        if reply == QMessageBox.StandardButton.Yes:
+            event.accept()  # Close the window
+        else:
+            event.ignore()  # Ignore the close event

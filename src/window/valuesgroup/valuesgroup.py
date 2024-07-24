@@ -1,4 +1,5 @@
 from PyQt6.QtWidgets import QLabel, QLineEdit, QGridLayout, QHBoxLayout, QScrollArea, QWidget, QLayout
+from PyQt6.QtCore import Qt
 
 import window.valuesgroup.constants as c
 
@@ -19,25 +20,32 @@ class ValuesDescr:
         
     def __create(self) -> None:
         self.__grabber["value_descr_item1"] = QLabel(self.__label1)
-        self.__grabber["value_descr_item1"].setFixedSize(100, 20)
+        self.__grabber["value_descr_item1"].setFixedSize(100, 30)
+        self.__grabber["value_descr_item1"].setAlignment(Qt.AlignmentFlag.AlignCenter)
         
         self.__grabber["value_descr_item2"] = QLabel(self.__label2)
-        self.__grabber["value_descr_item2"].setFixedSize(75, 20)
+        self.__grabber["value_descr_item2"].setFixedSize(75, 30)
+        self.__grabber["value_descr_item2"].setAlignment(Qt.AlignmentFlag.AlignCenter)
         
         self.__grabber["value_descr_item3"] = QLabel(self.__label3)
-        self.__grabber["value_descr_item3"].setFixedSize(75, 20)
+        self.__grabber["value_descr_item3"].setFixedSize(75, 30)
+        self.__grabber["value_descr_item3"].setAlignment(Qt.AlignmentFlag.AlignCenter)
         
         self.__grabber["value_descr_item4"] = QLabel(self.__label4)
-        self.__grabber["value_descr_item4"].setFixedSize(100, 20)
+        self.__grabber["value_descr_item4"].setFixedSize(100, 30)
+        self.__grabber["value_descr_item4"].setAlignment(Qt.AlignmentFlag.AlignCenter)
         
         self.__grabber["value_descr_item5"] = QLabel(self.__label5)
-        self.__grabber["value_descr_item5"].setFixedSize(150, 20)
+        self.__grabber["value_descr_item5"].setFixedSize(150, 30)
+        self.__grabber["value_descr_item5"].setAlignment(Qt.AlignmentFlag.AlignCenter)
         
         self.__grabber["value_descr_item6"] = QLabel(self.__label6)
-        self.__grabber["value_descr_item6"].setFixedSize(300, 20)
+        self.__grabber["value_descr_item6"].setFixedSize(300, 30)
+        self.__grabber["value_descr_item6"].setAlignment(Qt.AlignmentFlag.AlignCenter)
         
         self.__grabber["value_descr_item7"] = QLabel(self.__label7)
-        self.__grabber["value_descr_item7"].setFixedSize(150, 20)
+        self.__grabber["value_descr_item7"].setFixedSize(150, 30)
+        self.__grabber["value_descr_item7"].setAlignment(Qt.AlignmentFlag.AlignCenter)
         
     def _addDescr(self, layout: QLayout) -> None:
         self.__layout = layout
@@ -70,12 +78,15 @@ class ValuesLine:
     def __create(self) -> None:
         self.__group_label = QLabel(self.__group)
         self.__group_label.setFixedSize(100, 20)
+        self.__group_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         
         self.__physical_address_label = QLabel(self.__physical_address)
         self.__physical_address_label.setFixedSize(75, 20)
+        self.__physical_address_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         
         self.__logical_address_label = QLabel(self.__logical_address)
         self.__logical_address_label.setFixedSize(75, 20)
+        self.__logical_address_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         
         # Check if the group is NAME_1 or NAME_4 - if yes, create QLineEdit, else QLabel
         if self.__group == c.NAME_1 or self.__group == c.NAME_4:

@@ -44,7 +44,7 @@ class Data:
             }
         }
         
-        self.__current_file_path = None
+        self.current_file_path = None
     
     # Read the data from the file
     def read(self, file_path: str) -> None:
@@ -131,12 +131,21 @@ class Data:
             self.write(self.__current_file_path, content)
     
     # Open the file
-    def open(self, window) -> None:
+    def open(self, window) -> bool:
         # Open the file dialog
         file_dialog = QFileDialog()
         # Get the file path
         file_path, _ = file_dialog.getOpenFileName(window, "Open File", "", "CSV files (*.csv);;All files (*.*)")
         # If the file path is set
         if file_path:
-            self.read(file_path)
+            # Read the header of the file
+            with open(file_path, mode='r') as file:
+                reader = csv.reader(file, delimiter=';')
+                header = next(reader)
+                if header == ['group', 'physical_address', 'logical_address', 'value', 'name', 'description', 'notes']:
+                    self.read(file_path)
+                    self.current_file_path = file_path
+                    print(self.current_file_path)
+            return True
+        return False
     

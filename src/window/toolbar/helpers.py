@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QWidget, QLineEdit, QHBoxLayout, QWidgetAction, QToolBar, QMainWindow
+from PyQt6.QtWidgets import QWidget, QLineEdit, QHBoxLayout, QWidgetAction, QToolBar, QMainWindow, QToolButton
 from PyQt6.QtGui import QAction
 from PyQt6.QtCore import QTimer
 
@@ -17,6 +17,9 @@ class ValueButton:
         # Create the button
         self.__grabber[f"{self.__name}_action"] = QAction(self.__name, self.__window)
         self.__grabber[f"{self.__name}_action"].setCheckable(True)
+        self.__grabber[f"{self.__name}_action_btn"] = QToolButton()
+        self.__grabber[f"{self.__name}_action_btn"].setDefaultAction(self.__grabber[f"{self.__name}_action"])
+        self.__grabber[f"{self.__name}_action_btn"].setStyleSheet("background-color: #D53734;")
         self.__grabber[f"{self.__name}_edit"] = QLineEdit()
         self.__grabber[f"{self.__name}_edit"].setText("1000")
         self.__grabber[f"{self.__name}_edit"].setPlaceholderText("Enter time in ms")
@@ -32,6 +35,6 @@ class ValueButton:
     def addAction(self, toolbar: QToolBar) -> None:
         self.__toolbar = toolbar
         
-        self.__toolbar.addAction(self.__grabber[f"{self.__name}_action"])
+        self.__toolbar.addWidget(self.__grabber[f"{self.__name}_action_btn"])
         self.__toolbar.addAction(self.__widget_action)
         

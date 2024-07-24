@@ -14,7 +14,7 @@ class StateIndicator:
     def __create(self) -> None:
         # Create the state indicator
         self.__grabber["state_indicator"] = QLabel("Disconnected")
-        self.__grabber["state_indicator"].setStyleSheet("background-color: red;")
+        self.__grabber["state_indicator"].setStyleSheet("background-color: #D53734;")
         # Set the alignment - center
         self.__grabber["state_indicator"].setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.__grabber["state_indicator"].setFixedHeight(30)

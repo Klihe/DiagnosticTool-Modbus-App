@@ -259,9 +259,12 @@ class Device:
                 elif str(data["value"][i]) == "False":
                     data["value"][i] = False
                 else:
-                    continue
+                    data["value"][i] = None
             elif data["group"][i] == "Holding register":
-                data["value"][i] = int(data["value"][i])
+                if str(data["value"][i]).isnumeric() and int(data["value"][i]) < 65536:
+                    data["value"][i] = int(data["value"][i])
+                else:
+                    data["value"][i] = 0
                 
     # Write the data to the device   
     def __write_item(self, write_method, item, data: list) -> None:

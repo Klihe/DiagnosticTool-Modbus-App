@@ -12,4 +12,4 @@ DESCR_POSITION = 1
 VALUES_POSITION = 2
 
 # Constants for the columns
-ITEMS = ['group', 'phy_addr', 'log_addr', 'value', 'name', 'description', 'notes']
+ITEMS = ['group', 'physical\nadress', 'logical\nadress', 'value', 'name', 'description', 'notes']
