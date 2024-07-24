@@ -95,6 +95,7 @@ class ValuesLine:
         else:
             self.__value_label = QLabel(self.__value)
             self.__value_label.setFixedSize(100, 20)
+            self.__value_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
             
         self.__grabber[f"name_edit_{self.__id}"] = QLineEdit(self.__name)
         self.__grabber[f"name_edit_{self.__id}"].setFixedSize(150, 20)

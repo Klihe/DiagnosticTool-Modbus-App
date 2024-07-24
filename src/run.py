@@ -93,6 +93,10 @@ def main() -> None:
     # Function for connect button
     def connect() -> None:
         global is_readingInInterval
+        
+        if is_readingInInterval or device.is_connected:
+            return None
+        
         state_indicator("#D53734")
         window.grabber["connect_btn"].setStyleSheet("background-color: #FA9938;")
         
@@ -141,6 +145,9 @@ def main() -> None:
     def disconnect() -> None:
         global is_readingInInterval
         
+        if is_readingInInterval or device.is_connecting:
+            return None
+        
         state_indicator("#D53734")
         window.grabber["disconnect_btn"].setStyleSheet("background-color: #FA9938;")
         
@@ -148,11 +155,6 @@ def main() -> None:
         window.commgroup.update_state("Disconnecting...", "#2D4EB0")
         
         # If the device is connected - disconnect
-        if is_readingInInterval:
-            return None
-        if device.is_connecting:
-            window.commgroup.update_state("Error: Device is connecting", "#FA9938")
-            return None
         if device.is_connected:
             device.disconnect()
             window.valuesgroup.clear()
@@ -169,7 +171,7 @@ def main() -> None:
     def read() -> None:
         global is_readingInInterval
         # When function is in progress
-        if not is_readingInInterval:
+        if not is_readingInInterval or device.is_connecting:
             state_indicator("#D53734")
             window.grabber["read_btn"].setStyleSheet("background-color: #FA9938;")
         
@@ -201,6 +203,8 @@ def main() -> None:
     def readInInterval(checked) -> None:
         global is_readingInInterval
         # When device isn't connected - Error
+        if device.is_connecting:
+            return None
         if not device.is_connected:
             window.commgroup.update_state("Error: Non-connected device", "#FA9938")
             return None
@@ -228,7 +232,7 @@ def main() -> None:
     def write() -> None:
         global is_readingInInterval
         
-        if is_readingInInterval:
+        if is_readingInInterval or device.is_connecting:
             return None
         
         # When function is in progress
@@ -286,6 +290,7 @@ def main() -> None:
         # Get data and save them
         temp = window.valuesgroup.get()
         data.saveas(temp, window)
+        window.setWindowTitle(f"{window.windowTitle().split('-')[0]} - {data.current_file_path}")
         
         window.commgroup.update_state("Device: Ready", "#0D825D")
     
@@ -305,7 +310,7 @@ def main() -> None:
         # Open the file and update the table
         device.table_is_imported = data.open(window)
         window.valuesgroup.update(data.data, False)
-        window.setWindowTitle(f"{window.windowTitle()} - {data.current_file_path}")
+        window.setWindowTitle(f"{window.windowTitle().split('-')[0]} - {data.current_file_path}")
         
         window.commgroup.update_state("Device: Ready", "#0D825D")
     

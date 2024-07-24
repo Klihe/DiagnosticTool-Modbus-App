@@ -111,12 +111,12 @@ class Data:
     # Save the data to the file
     def save(self, content, window) -> None:
         # If the file path is not set
-        if not self.__current_file_path:
+        if not self.current_file_path:
             # Save the data to the file
             self.saveas(content, window)
         else:
             # Save the data to the file
-            self.write(self.__current_file_path, content)
+            self.write(self.current_file_path, content)
     
     # Save the data to the file
     def saveas(self, content, window) -> None:
@@ -126,9 +126,9 @@ class Data:
         file_path, _ = file_dialog.getSaveFileName(window, "Save File", "", "CSV files (*.csv);;All files (*.*)")
         # If the file path is set
         if file_path:
-            self.__current_file_path = file_path
+            self.current_file_path = file_path
             # Save the data to the file
-            self.write(self.__current_file_path, content)
+            self.write(self.current_file_path, content)
     
     # Open the file
     def open(self, window) -> bool:
@@ -145,7 +145,6 @@ class Data:
                 if header == ['group', 'physical_address', 'logical_address', 'value', 'name', 'description', 'notes']:
                     self.read(file_path)
                     self.current_file_path = file_path
-                    print(self.current_file_path)
             return True
         return False
     

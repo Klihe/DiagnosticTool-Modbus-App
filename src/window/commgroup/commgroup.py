@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QLabel, QComboBox, QLineEdit, QPushButton, QLayout, QGridLayout, QHBoxLayout
+from PyQt6.QtWidgets import QLabel, QComboBox, QLineEdit, QPushButton, QLayout, QHBoxLayout
 from PyQt6.QtGui import QColor
 from PyQt6.QtCore import Qt
 

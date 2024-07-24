@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QMainWindow, QHBoxLayout, QVBoxLayout, QGridLayout, QWidget, QMessageBox
+from PyQt6.QtWidgets import QMainWindow, QHBoxLayout, QVBoxLayout, QWidget, QMessageBox
 from PyQt6.QtGui import QIcon
 
 from window.toolbar.toolbar import ToolBar
@@ -48,7 +48,7 @@ class Window(QMainWindow):
         # Show a message box to confirm exit
         reply = QMessageBox.question(self, 'Quit Confirmation',
                                      "Are you sure you want to quit?",
-                                     QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No, QMessageBox.StandardButton.No)
+                                     QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No, QMessageBox.StandardButton.Yes)
 
         if reply == QMessageBox.StandardButton.Yes:
             event.accept()  # Close the window
