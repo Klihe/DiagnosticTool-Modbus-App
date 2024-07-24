@@ -1,4 +1,5 @@
 from PyQt6.QtWidgets import QMainWindow, QHBoxLayout, QVBoxLayout, QGridLayout, QWidget, QMessageBox
+from PyQt6.QtGui import QIcon
 
 from window.toolbar.toolbar import ToolBar
 from window.menubar.menubar import MenuBar
@@ -17,6 +18,7 @@ class Window(QMainWindow):
         # Set the window properties
         self.setWindowTitle(c.WINDOW_TITLE)
         self.setGeometry(*c.WINDOW_GEOMETRY)
+        self.setWindowIcon(QIcon("image/peg.png"))
         
         # Create the layout
         self.__page_layout = QHBoxLayout()

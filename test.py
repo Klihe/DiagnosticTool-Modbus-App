@@ -1,39 +1,32 @@
-from PyQt6.QtWidgets import QApplication, QMainWindow, QMessageBox, QVBoxLayout, QPushButton, QWidget
+import os
+from PyQt6.QtWidgets import QApplication, QMainWindow, QLabel, QVBoxLayout, QWidget
+from PyQt6.QtGui import QIcon
+from PyQt6.QtCore import Qt
 import sys
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle("Confirm Quit Example")
+        self.setWindowTitle("Application with Icon")
         self.setGeometry(300, 300, 400, 200)
 
-        # Create a simple button in the main window
-        self.button = QPushButton("Click me", self)
-        self.button.clicked.connect(self.on_button_clicked)
+        # Set the window icon
+        icon_path = os.path.join(os.path.dirname(__file__), 'src/peg.png')
+        self.setWindowIcon(QIcon(icon_path))
+
+        # Create a QLabel
+        self.label = QLabel("This is a sample application with an icon.", self)
+        self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         # Set up the layout
         layout = QVBoxLayout()
-        layout.addWidget(self.button)
+        layout.addWidget(self.label)
 
         # Create a container widget
         container = QWidget()
         container.setLayout(layout)
         self.setCentralWidget(container)
-
-    def on_button_clicked(self):
-        print("Button clicked")
-
-    def closeEvent(self, event):
-        # Show a message box to confirm exit
-        reply = QMessageBox.question(self, 'Quit Confirmation',
-                                     "Are you sure you want to quit?",
-                                     QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No, QMessageBox.StandardButton.No)
-
-        if reply == QMessageBox.StandardButton.Yes:
-            event.accept()  # Close the window
-        else:
-            event.ignore()  # Ignore the close event
 
 app = QApplication(sys.argv)
 window = MainWindow()

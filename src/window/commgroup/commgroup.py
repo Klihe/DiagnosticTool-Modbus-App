@@ -97,11 +97,9 @@ class CommLine:
     # Toggle the custom option      
     def __toggle(self, checked: bool) -> None:
         if checked:
-            print("Custom switch checked")
             self.__grabber[f"{self.__mark}_option"].hide()
             self.__grabber[f"{self.__mark}_custom_opt"].show()
         else:
-            print("Custom switch unchecked")
             self.__grabber[f"{self.__mark}_custom_opt"].hide()
             self.__grabber[f"{self.__mark}_option"].show()
 
