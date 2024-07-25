@@ -2,6 +2,7 @@ import sys
 from PyQt6.QtWidgets import QApplication
 from ui.main_window import MainWindow
 from config.settings import load_settings
+from resources.stylesheet import load_stylesheet
 
 class Application:
     """Application class.
@@ -14,6 +15,11 @@ class Application:
         
         # Configuration settings
         self.__config = load_settings()
+        # Stylesheet
+        self.__stylesheet = load_stylesheet()
+        
+        # Set the stylesheet
+        self.app.setStyleSheet(self.__stylesheet)
         
         # Create the main window
         self.__window = MainWindow(self.__config)
