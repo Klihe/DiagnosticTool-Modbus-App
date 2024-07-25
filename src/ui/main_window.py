@@ -1,6 +1,7 @@
 from PyQt6.QtWidgets import QMainWindow
 
 from ui.menu_section import MenuSection
+from ui.tool_section import ToolSection
 
 class MainWindow(QMainWindow):
     """Main window class.
@@ -28,3 +29,4 @@ class MainWindow(QMainWindow):
         
         
         self.__menu_section = MenuSection(self)
+        self.__tool_section = ToolSection(self)
