@@ -1,5 +1,7 @@
 from PyQt6.QtWidgets import QMainWindow
 
+from ui.menu_section import MenuSection
+
 class MainWindow(QMainWindow):
     """Main window class.
 
@@ -24,3 +26,5 @@ class MainWindow(QMainWindow):
             config.get("window_height", 600)
         )
         
+        
+        self.__menu_section = MenuSection(self)
