@@ -1,9 +1,26 @@
 from PyQt6.QtWidgets import QMainWindow
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    """Main window class.
+
+    Args:
+        QMainWindow (QMainWindow): The base class for all main window objects.
+    """
+    def __init__(self, config: dict):
+        """Initialize the main window.
+
+        Args:
+            config (dict): The configuration settings.
+        """
         super().__init__()
         
-        self.setWindowTitle("Main Window")      # Get the values from config/settings.py
-        self.setGeometry(100, 100, 800, 600)    # Get the values from config/settings.py
+        # Set the window title
+        self.setWindowTitle(config.get("window_title", "Default Title"))
+        # Set the window icon
+        self.setGeometry(
+            config.get("window_x_position", 100),
+            config.get("window_y_position", 100),
+            config.get("window_width", 800),
+            config.get("window_height", 600)
+        )
         
