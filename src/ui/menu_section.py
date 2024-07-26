@@ -36,3 +36,4 @@ class MenuSection:
         
         plot = MenuTab(self.__menu, "Plot")
         plot.add_action("Open")
+        
