@@ -1,7 +1,27 @@
 {
-    "window_title": "Diagnostic Tool - Modbus",
-    "window_width": 800,
-    "window_height": 600,
-    "window_x_position": 100,
-    "window_y_position": 100
+    "window": {
+        "title": "Diagnostic Tool - Modbus",
+        "width": 800,
+        "height": 600,
+        "x_position": 100,
+        "y_position": 100
+    },
+
+    "communication": {
+        "client_options": ["TCP", "Serial"],
+        "method_options": ["RTU"],
+        "port_options": [],
+        "baudrate_options": ["9600", "19200", "38400", "57600", "115200"],
+        "parity_options": ["N", "E", "O"],
+        "stopbits_options": ["1", "2"],
+        "bytesize_options": ["7", "8"],
+        
+        "client_default": "Serial",
+        "method_default": "RTU",
+        "port_default": "",
+        "baudrate_default": "115200",
+        "parity_default": "N",
+        "stopbits_default": "1",
+        "bytesize_default": "8"
+    }
 }
