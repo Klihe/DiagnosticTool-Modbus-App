@@ -16,7 +16,7 @@ class MyToolButton:
         
         self.__parent.addWidget(self.__button)
         
-class MyValueButton:
+class MyToolValueButton:
     def __init__(self, name: str, window: QMainWindow, parent: QToolBar) -> None:
         self.__name = name
         self.__window = window
@@ -60,6 +60,6 @@ class ToolSection:
         MyToolButton("Disconnect", self.__toolbar)
         MyToolButton("Write", self.__toolbar)
         MyToolButton("Read", self.__toolbar)
-        MyValueButton("ReadInInterval", self.__window, self.__toolbar)
+        MyToolValueButton("ReadInInterval", self.__window, self.__toolbar)
         MyToolButton("Compare", self.__toolbar)
         MyToolButton("ResetPlot", self.__toolbar)
