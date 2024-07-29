@@ -10,6 +10,7 @@ class CommState:
 
 class CommLine(QWidget):
     def __init__(self, descr: str, options: list[None], default_option: str, custom: bool, refresh: bool) -> None:
+        
         super().__init__()
         self.__id = descr.lower()
         self.__descr = descr
@@ -111,6 +112,7 @@ class CommLine(QWidget):
 class CommSection(QWidget):
     def __init__(self, config: dict) -> None:
         super().__init__()
+        
         self.__config = config
         
         self.__create()
