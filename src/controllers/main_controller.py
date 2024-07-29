@@ -2,6 +2,8 @@ from PyQt6.QtWidgets import QPushButton, QToolButton, QComboBox
 from PyQt6.QtGui import QAction
 from ui.main_window import MainWindow
 
+from models.ports import find_ports
+
 class MainController:
     def __init__(self, config) -> None:
         self.__config = config
@@ -23,6 +25,7 @@ class MainController:
         self.__compare = self.__main_window.findChild(QToolButton, "Compare")
         self.__reset_plot = self.__main_window.findChild(QToolButton, "ResetPlot")
         
+        self.__port_refresh = self.__main_window.findChild(QPushButton, "port_refresh_button")
         self.__client_options_box = self.__main_window.findChild(QComboBox, "client_options_box")
         
         self.__open_file.triggered.connect(lambda: print("Open"))
@@ -40,6 +43,7 @@ class MainController:
         self.__reset_plot.clicked.connect(lambda: print("ResetPlot"))
         
         self.__client_options_box.currentTextChanged.connect(self.__change_client)
+        self.__port_refresh.clicked.connect(find_ports)
     
     def show(self) -> None:
         self.__main_window.show()

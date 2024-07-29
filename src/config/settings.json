@@ -29,5 +29,11 @@
 
         "ip_default": "",
         "server_default": ""
+    }, 
+
+    "port_prefix": {
+        "macOS": "/dev/cu.usbserial",
+        "linux": "/dev/cu.usbserial",
+        "windows": "COM"
     }
 }
