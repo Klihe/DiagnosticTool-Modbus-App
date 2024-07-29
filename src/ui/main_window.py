@@ -32,11 +32,11 @@ class MainWindow(QMainWindow):
         self.__comm_layout = QVBoxLayout()
         self.__values_layout = QVBoxLayout()
         
-        self.__menu_section = MenuSection(self)
-        self.__tool_section = ToolSection(self)
-        self.__comm_section = CommSection(config)
+        self.menu_section = MenuSection(self)
+        self.tool_section = ToolSection(self)
+        self.comm_section = CommSection(config)
         
-        self.__comm_section.addSection(self.__comm_layout)
+        self.comm_section.addSection(self.__comm_layout)
         
         self.__page_layout.addLayout(self.__comm_layout)
         

@@ -8,9 +8,9 @@ class MenuTab:
         
         self.__menu = self.__parent.addMenu(self.__name)
         
-    def add_action(self, name: str) -> QAction:
+    def add_action(self, name: str, id: str) -> QAction:
         action = QAction(name, self.__parent)
-        action.setObjectName(name)
+        action.setObjectName(id)
         
         self.__menu.addAction(action)
         
@@ -27,13 +27,13 @@ class MenuSection:
         self.__menu = self.__parent.menuBar()
         
         file = MenuTab(self.__menu, "File")
-        file.add_action("Open")
-        file.add_action("Save")
-        file.add_action("Save As")
+        file.add_action("Open", "open_file")
+        file.add_action("Save", "save_file")
+        file.add_action("Save As", "save_as_file")
         
         compare = MenuTab(self.__menu, "Compare")
-        compare.add_action("Open")
+        compare.add_action("Open", "open_compare")
         
         plot = MenuTab(self.__menu, "Plot")
-        plot.add_action("Open")
+        plot.add_action("Open", "open_plot")
         
