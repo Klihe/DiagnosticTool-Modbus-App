@@ -16,7 +16,6 @@ class MenuTab:
         
         return action
     
-
 class MenuSection:
     def __init__(self, parent: QMainWindow) -> None:
         self.__parent = parent

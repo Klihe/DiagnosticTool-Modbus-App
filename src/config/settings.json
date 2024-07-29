@@ -1,8 +1,8 @@
 {
     "window": {
         "title": "Diagnostic Tool - Modbus",
-        "width": 800,
-        "height": 600,
+        "width": 1600,
+        "height": 900,
         "x_position": 100,
         "y_position": 100
     },
