@@ -2,6 +2,7 @@ from PyQt6.QtWidgets import QPushButton, QToolButton, QComboBox
 from PyQt6.QtGui import QAction
 from ui.main_window import MainWindow
 
+from controllers.menu_controller import MenuController
 from controllers.comm_controller import CommController
 
 from models.ports import find_ports
@@ -11,17 +12,12 @@ class MainController:
         self.__config = config
         self.__main_window = MainWindow(self.__config)
         
+        self.__menu_controller = MenuController(self.__main_window)
         self.__comm_controller = CommController(self.__main_window)
         
         self.__setup_connections()
     
     def __setup_connections(self) -> None:
-        self.__open_file = self.__main_window.findChild(QAction, "open_file")
-        self.__save = self.__main_window.findChild(QAction, "save_file")
-        self.__save_as = self.__main_window.findChild(QAction, "save_as_file")
-        self.__open_compare = self.__main_window.findChild(QAction, "open_compare")
-        self.__open_plot = self.__main_window.findChild(QAction, "open_plot")
-        
         self.__connect = self.__main_window.findChild(QToolButton, "Connect")
         self.__disconnect = self.__main_window.findChild(QToolButton, "Disconnect")
         self.__write = self.__main_window.findChild(QToolButton, "Write")
@@ -29,12 +25,6 @@ class MainController:
         self.__read_in_interval = self.__main_window.findChild(QToolButton, "ReadInInterval_button")
         self.__compare = self.__main_window.findChild(QToolButton, "Compare")
         self.__reset_plot = self.__main_window.findChild(QToolButton, "ResetPlot")
-        
-        self.__open_file.triggered.connect(lambda: print("Open"))
-        self.__save.triggered.connect(lambda: print("Save"))
-        self.__save_as.triggered.connect(lambda: print("SaveAs"))
-        self.__open_compare.triggered.connect(lambda: print("OpenCompare"))
-        self.__open_plot.triggered.connect(lambda: print("OpenPlot"))
         
         self.__connect.clicked.connect(lambda: print("Connect"))
         self.__disconnect.clicked.connect(lambda: print("Disconnect"))
