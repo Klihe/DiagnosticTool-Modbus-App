@@ -24,6 +24,44 @@ class TableSearch(QWidget):
         self.__item_layout.addWidget(self.__search_button)
         
         self.__layout.addLayout(self.__item_layout)
+
+class TableDescription(QWidget):
+    def __init__(self) -> None:
+        super().__init__()
+        
+        self.__create()
+        
+    def __create(self) -> None:
+        self.__item_layout = QHBoxLayout()
+        
+        self.__group_label = QLabel("Group")
+        self.__physical_address_label = QLabel("Physical Address")
+        self.__logical_address_label = QLabel("Logical Address")
+        self.__value_label = QLabel("Value")
+        self.__value_changed_label = QLabel("Value Changed")
+        self.__value_compare_label = QLabel("Value Compare")
+        self.__save_check_label = QLabel("Save Check")
+        self.__in_graph_label = QLabel("In Graph")
+        self.__name_label = QLabel("Name")
+        self.__description_label = QLabel("Description")
+        self.__notes_label = QLabel("Notes")
+        
+    def _addDescription(self, layout: QLayout) -> None:
+        self.__layout = layout
+        
+        self.__item_layout.addWidget(self.__group_label)
+        self.__item_layout.addWidget(self.__physical_address_label)
+        self.__item_layout.addWidget(self.__logical_address_label)
+        self.__item_layout.addWidget(self.__value_label)
+        self.__item_layout.addWidget(self.__value_changed_label)
+        self.__item_layout.addWidget(self.__value_compare_label)
+        self.__item_layout.addWidget(self.__save_check_label)
+        self.__item_layout.addWidget(self.__in_graph_label)
+        self.__item_layout.addWidget(self.__name_label)
+        self.__item_layout.addWidget(self.__description_label)
+        self.__item_layout.addWidget(self.__notes_label)
+        
+        self.__layout.addLayout(self.__item_layout)
 class TableLine(QWidget):
     def __init__(self, group: str, physical_address: str, logical_address: str, value: str, value_changed: str, value_compare: str, name: str, description: str, notes: str) -> None:
         super().__init__()
@@ -122,13 +160,15 @@ class TableSection(QWidget):
         self.__grid_container = QWidget()
         self.__grid_layout = QVBoxLayout(self.__grid_container)
         
-        self.__grid = TableGrid()
         self.__search = TableSearch()
+        self.__description = TableDescription()
+        self.__grid = TableGrid()
         
     def addSection(self, layout: QLayout) -> None:
         self.__layout = layout
         
         self.__search._addSearch(self.__layout)
+        self.__description._addDescription(self.__layout)
         self.__grid._addGrid(self.__grid_layout)
         self.__scroll_area.setWidget(self.__grid_container)
         
