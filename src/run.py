@@ -19,7 +19,7 @@ class Application:
         # self.__stylesheet = load_stylesheet()
         
         # Set the stylesheet
-        self.app.setStyleSheet(self.__stylesheet)
+        # self.app.setStyleSheet(self.__stylesheet)
         
         # Create the main window
         self.__controller = MainController(self.__config)
