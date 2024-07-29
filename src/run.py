@@ -1,6 +1,6 @@
 import sys
 from PyQt6.QtWidgets import QApplication
-from ui.main_window import MainWindow
+from controllers.main_controller import MainController
 from config.settings import load_settings
 from resources.stylesheet import load_stylesheet
 
@@ -22,10 +22,10 @@ class Application:
         self.app.setStyleSheet(self.__stylesheet)
         
         # Create the main window
-        self.__window = MainWindow(self.__config)
+        self.__controller = MainController(self.__config)
         
         # Show the main window
-        self.__window.show()
+        self.__controller.show()
         
     def run(self):
         """Run the application.

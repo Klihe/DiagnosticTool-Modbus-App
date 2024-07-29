@@ -15,7 +15,7 @@
         "parity_options": ["N", "E", "O"],
         "stopbits_options": ["1", "2"],
         "bytesize_options": ["7", "8"],
-        
+
         "client_default": "Serial",
         "method_default": "RTU",
         "port_default": "",

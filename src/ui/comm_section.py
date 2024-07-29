@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QWidget, QLabel, QComboBox, QLineEdit, QPushButton, QLayout, QHBoxLayout
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import pyqtSlot
 
 class CommState:
     def __init__(self) -> None:
@@ -26,18 +26,17 @@ class CommLine(QWidget):
         self.__label = QLabel(self.__descr)
         
         self.__options_box = QComboBox()
+        self.__options_box.setObjectName(self.__id + "_options_box")
         self.__options_box.addItems(self.__options)
         self.__options_box.setCurrentText(self.__default_option)
-        self.__options_box.setObjectName(self.__id + "_options_box")
-        print(self.__id + "_options_box")
         
         self.__edit = QLineEdit()
         self.__edit.hide()
         
         if self.__custom:
             self.__custom_switch = QPushButton("Custom")
-            self.__custom_switch.setCheckable(True)
             self.__custom_switch.setObjectName(self.__id + "_custom_switch")
+            self.__custom_switch.setCheckable(True)
             
         if self.__refresh:
             self.__refresh_button = QPushButton("Refresh")
@@ -65,17 +64,40 @@ class CommLine(QWidget):
             if self.__custom_switch.isChecked():
                 data = self.__edit.text()
             else:
-                data = self.__options.currentText()
+                data = self.__options_box.currentText()
         else:
-            data = self.__options.currentText()
+            data = self.__options_box.currentText()
             
         return data
     
     def _hide(self) -> None:
-        self.__item_layout.hide()
+        self.__label.hide()
+        self.__options_box.hide()
+        self.__edit.hide()
+        
+        if self.__custom:
+            self.__custom_switch.hide()
+        if self.__refresh:
+            self.__refresh_button.hide()
         
     def _show(self) -> None:
-        self.__item_layout.show()
+        self.__label.show()
+        self.__options_box.show()
+        self.__edit.show()
+        
+        if self.__custom:
+            self.__custom_switch.show()
+        if self.__refresh:
+            self.__refresh_button.show()
+    
+    @pyqtSlot()     
+    def __toggle(self) -> None:
+        if self.__custom_switch.isChecked():
+            self.__options_box.hide()
+            self.__edit.show()
+        else:
+            self.__edit.hide()
+            self.__options_box.show()
     
 class CommSection(QWidget):
     def __init__(self, config: dict) -> None:
