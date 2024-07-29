@@ -16,7 +16,7 @@ class Application:
         # Configuration settings
         self.__config = load_settings()
         # Stylesheet
-        self.__stylesheet = load_stylesheet()
+        # self.__stylesheet = load_stylesheet()
         
         # Set the stylesheet
         self.app.setStyleSheet(self.__stylesheet)
