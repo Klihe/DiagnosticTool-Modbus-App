@@ -12,4 +12,4 @@ class CommController:
         self.__port_refresh = self.__parent.findChild(QPushButton, "port_refresh_button")
         
     def __connect(self) -> None:
-        self.__port_refresh.clicked.connect(find_ports())
+        self.__port_refresh.clicked.connect(find_ports)
