@@ -1,6 +1,29 @@
 from PyQt6.QtWidgets import QWidget, QLabel, QHBoxLayout, QLineEdit, QPushButton, QLayout, QScrollArea, QVBoxLayout, QComboBox
 from PyQt6.QtGui import QIntValidator
 
+class TableSearch(QWidget):
+    def __init__(self) -> None:
+        super().__init__()
+        
+        self.__create()
+        
+    def __create(self) -> None:
+        self.__item_layout = QHBoxLayout()
+        
+        self.__search_label = QLabel("Search:")
+        self.__search_edit = QLineEdit()
+        self.__search_options_box = QComboBox()
+        self.__search_button = QPushButton("Search")
+        
+    def _addSearch(self, layout: QLayout) -> None:
+        self.__layout = layout
+        
+        self.__item_layout.addWidget(self.__search_label)
+        self.__item_layout.addWidget(self.__search_edit)
+        self.__item_layout.addWidget(self.__search_options_box)
+        self.__item_layout.addWidget(self.__search_button)
+        
+        self.__layout.addLayout(self.__item_layout)
 class TableLine(QWidget):
     def __init__(self, group: str, physical_address: str, logical_address: str, value: str, value_changed: str, value_compare: str, name: str, description: str, notes: str) -> None:
         super().__init__()
@@ -100,10 +123,12 @@ class TableSection(QWidget):
         self.__grid_layout = QVBoxLayout(self.__grid_container)
         
         self.__grid = TableGrid()
+        self.__search = TableSearch()
         
     def addSection(self, layout: QLayout) -> None:
         self.__layout = layout
         
+        self.__search._addSearch(self.__layout)
         self.__grid._addGrid(self.__grid_layout)
         self.__scroll_area.setWidget(self.__grid_container)
         
