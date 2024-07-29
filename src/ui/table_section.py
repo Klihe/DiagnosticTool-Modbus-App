@@ -35,8 +35,8 @@ class TableDescription(QWidget):
         self.__item_layout = QHBoxLayout()
         
         self.__group_label = QLabel("Group")
-        self.__physical_address_label = QLabel("Physical Address")
-        self.__logical_address_label = QLabel("Logical Address")
+        self.__physical_address_label = QLabel("Physical\nAddress")
+        self.__logical_address_label = QLabel("Logical\nAddress")
         self.__value_label = QLabel("Value")
         self.__value_changed_label = QLabel("Value Changed")
         self.__value_compare_label = QLabel("Value Compare")
@@ -45,6 +45,18 @@ class TableDescription(QWidget):
         self.__name_label = QLabel("Name")
         self.__description_label = QLabel("Description")
         self.__notes_label = QLabel("Notes")
+        
+        self.__group_label.setFixedSize(100, 30)
+        self.__physical_address_label.setFixedSize(50, 30)
+        self.__logical_address_label.setFixedSize(50, 30)
+        self.__value_label.setFixedSize(100, 30)
+        self.__value_changed_label.setFixedSize(100, 30)
+        self.__value_compare_label.setFixedSize(100, 30)
+        self.__save_check_label.setFixedSize(50, 30)
+        self.__in_graph_label.setFixedSize(50, 30)
+        self.__name_label.setFixedSize(150, 30)
+        self.__description_label.setFixedSize(300, 30)
+        self.__notes_label.setFixedSize(100, 30)
         
     def _addDescription(self, layout: QLayout) -> None:
         self.__layout = layout
@@ -108,6 +120,21 @@ class TableLine(QWidget):
         self.__name_edit = QLineEdit(self.__name)
         self.__description_edit = QLineEdit(self.__description)
         self.__notes_edit = QLineEdit(self.__notes)
+        
+        self.__group_label.setFixedSize(100, 30)
+        self.__physical_address_label.setFixedSize(50, 30)
+        self.__logical_address_label.setFixedSize(50, 30)
+        if self.__name == "Coil" or self.__name == "Discrete Input":
+            self.__value_label.setFixedSize(100, 30)
+        else:
+            self.__value_edit.setFixedSize(100, 30)
+        self.__value_changed_label.setFixedSize(100, 30)
+        self.__value_compare_label.setFixedSize(100, 30)
+        self.__save_check_button.setFixedSize(50, 30)
+        self.__in_graph_button.setFixedSize(50, 30)
+        self.__name_edit.setFixedSize(150, 30)
+        self.__description_edit.setFixedSize(300, 30)
+        self.__notes_edit.setFixedSize(100, 30)
         
     def _addLine(self, layout: QLayout) -> None:
         self.__layout = layout
