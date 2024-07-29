@@ -1,5 +1,6 @@
 from PyQt6.QtWidgets import QWidget, QLabel, QHBoxLayout, QLineEdit, QPushButton, QLayout, QScrollArea, QVBoxLayout, QComboBox
 from PyQt6.QtGui import QIntValidator
+from PyQt6 import QtCore
 
 class TableSearch(QWidget):
     def __init__(self) -> None:
@@ -57,6 +58,18 @@ class TableDescription(QWidget):
         self.__name_label.setFixedSize(150, 30)
         self.__description_label.setFixedSize(300, 30)
         self.__notes_label.setFixedSize(100, 30)
+        
+        self.__group_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.__physical_address_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.__logical_address_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.__value_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.__value_changed_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.__value_compare_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.__save_check_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.__in_graph_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.__name_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.__description_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.__notes_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         
     def _addDescription(self, layout: QLayout) -> None:
         self.__layout = layout
@@ -136,6 +149,17 @@ class TableLine(QWidget):
         self.__description_edit.setFixedSize(300, 30)
         self.__notes_edit.setFixedSize(100, 30)
         
+        self.__group_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.__physical_address_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.__logical_address_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        if self.__name == "Coil" or self.__name == "Discrete Input":
+            self.__value_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.__value_changed_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.__value_compare_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.__name_edit.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.__description_edit.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.__notes_edit.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        
     def _addLine(self, layout: QLayout) -> None:
         self.__layout = layout
         
@@ -162,15 +186,20 @@ class TableGrid(QWidget):
     def __init__(self) -> None:
         super().__init__()
         
+        self.lines = []
+        
         self.__create()
         
     def __create(self) -> None:
-        self.__line1 = TableLine("Group", "Physical Address", "Logical Address", "Value", "Value Changed", "Value Compare", "Name", "Description", "Notes")
+        
+        for i in range(50):
+            self.lines.append(TableLine("Group", str(i), str(i+1), "0", "0", "0", "Name", "Description", "Notes"))
     
     def _addGrid(self, layout: QLayout) -> None:
         self.__layout = layout
         
-        self.__line1._addLine(self.__layout)
+        for i in range(50):
+            self.lines[i]._addLine(self.__layout)
         
 class TableSection(QWidget):
     def __init__(self, config: dict) -> None:
