@@ -21,6 +21,3 @@ class MainController:
     
     def show(self) -> None:
         self.__main_window.show()
-        
-    def __change_client(self) -> None:
-        self.__main_window.comm_section.change_client()
