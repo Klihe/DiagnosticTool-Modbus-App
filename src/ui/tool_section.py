@@ -61,6 +61,7 @@ class ToolSection:
         MyToolButton("Write", self.__toolbar)
         MyToolButton("Read", self.__toolbar)
         MyToolValueButton("ReadInInterval", self.__window, self.__toolbar)
+        MyToolValueButton("NumberOfDataPoints", self.__window, self.__toolbar)
         MyToolButton("Compare", self.__toolbar)
         MyToolButton("ResetPlot", self.__toolbar)
         

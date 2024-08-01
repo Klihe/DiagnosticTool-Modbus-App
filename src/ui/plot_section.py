@@ -27,8 +27,8 @@ class PlotSection(QWidget):
     def __create(self) -> None:
         self.canvas = Plot(self, width=5, height=4, dpi=100)
         
-        self.data1 = [1, 2]
-        self.data2 = [1, 2]
+        self.data1 = []
+        self.data2 = []
         
         self.line1, = self.canvas.axes.plot(self.data1, 'r-', label='exp')
         self.canvas.axes.set_xlabel('time (s)')
@@ -48,7 +48,7 @@ class PlotSection(QWidget):
     def update_plot(self):
         # Generate new data
         new_data1 = random.randint(0, 10)
-        new_data2 = random.randint(0, 10)
+        new_data2 = random.randint(30, 50)
 
         # Update the data for data1
         if len(self.data1) >= 100:
