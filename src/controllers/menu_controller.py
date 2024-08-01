@@ -1,5 +1,7 @@
 from PyQt6.QtWidgets import QMainWindow
 from PyQt6.QtGui import QAction
+
+from models.files import open_file
 class MenuController:
     def __init__(self, parent: QMainWindow) -> None:
         self.__parent = parent
@@ -15,7 +17,7 @@ class MenuController:
         self.__open_plot = self.__parent.findChild(QAction, "open_plot")
     
     def __connect(self) -> None:
-        self.__open_file.triggered.connect(lambda: print("Open"))
+        self.__open_file.triggered.connect(lambda: open_file(self.__parent))
         self.__save.triggered.connect(lambda: print("Save"))
         self.__save_as.triggered.connect(lambda: print("SaveAs"))
         self.__open_compare.triggered.connect(lambda: print("OpenCompare"))
