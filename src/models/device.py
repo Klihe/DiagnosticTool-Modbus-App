@@ -98,12 +98,19 @@ class Device:
         while True:
             try:
                 response = read_method(address=address, count=1, slave=1)
-                try:
-                    response.bits[0]
-                except:
-                    response.registers[0]
-            except:
+                bits = getattr(response, "bits", [])
+                registers = getattr(response, "registers", [])
+
+                if len(bits) == 0 and len(registers) == 0:
+                    break
+
+                if len(bits) > 0:
+                    _ = bits[0]
+                else:
+                    _ = registers[0]
+            except Exception:
                 break
+
             address += 1
 
         return address

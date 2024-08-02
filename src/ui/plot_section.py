@@ -1,7 +1,6 @@
 import matplotlib
 import random
 import numpy as np
-import pandas as pd
 
 matplotlib.use("QtAgg")
 

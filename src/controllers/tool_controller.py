@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QMainWindow, QToolButton, QComboBox, QLineEdit, QPushButton
+from PyQt6.QtWidgets import QMainWindow, QToolButton
 from utils.custom_thread import CustomThread
 from models.device import Device
 

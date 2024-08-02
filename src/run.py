@@ -3,7 +3,6 @@ from PyQt6.QtWidgets import QApplication
 from controllers.main_controller import MainController
 from models.device import Device
 from config.settings import load_settings
-from resources.stylesheet import load_stylesheet
 
 
 class Application:

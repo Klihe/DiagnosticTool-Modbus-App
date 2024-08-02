@@ -1,5 +1,3 @@
-from PyQt6.QtWidgets import QPushButton, QToolButton, QComboBox
-from PyQt6.QtGui import QAction
 from ui.main_window import MainWindow
 
 from controllers.menu_controller import MenuController
@@ -8,7 +6,6 @@ from controllers.comm_controller import CommController
 from controllers.table_controller import TableController
 
 from models.device import Device
-from models.ports import find_ports
 
 
 class MainController:

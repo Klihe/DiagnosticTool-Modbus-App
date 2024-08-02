@@ -1,6 +1,3 @@
-import sys
-
-
 def load_stylesheet() -> str:
     """Load the stylesheet from the stylesheet.css file
 
