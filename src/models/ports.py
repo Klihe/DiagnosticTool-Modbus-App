@@ -6,7 +6,7 @@ def find_ports() -> list:
     config = load_settings()
 
     inputs = lp.comports()
-    available_ports = []
+    available_ports: list = []
 
     for input in inputs:
         if input.device.startswith(
@@ -16,5 +16,4 @@ def find_ports() -> list:
         ):
             available_ports.append(input.device)
 
-    print(available_ports)
     return available_ports

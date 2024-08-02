@@ -29,8 +29,8 @@ class PlotSection(QWidget):
     def __create(self) -> None:
         self.canvas = Plot(self, width=5, height=4, dpi=100)
 
-        self.data1 = []
-        self.data2 = []
+        self.data1: list = []
+        self.data2: list = []
 
         (self.line1,) = self.canvas.axes.plot(self.data1, "r-", label="exp")
         self.canvas.axes.set_xlabel("time (s)")

@@ -1,10 +1,11 @@
-from PyQt6.QtWidgets import QMainWindow, QToolButton
+from PyQt6.QtWidgets import QToolButton
+from ui.main_window import MainWindow
 from utils.custom_thread import CustomThread
 from models.device import Device
 
 
 class ToolController:
-    def __init__(self, parent: QMainWindow, device: Device) -> None:
+    def __init__(self, parent: MainWindow, device: Device) -> None:
         self.__parent = parent
         self.__device = device
 

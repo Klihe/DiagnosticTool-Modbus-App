@@ -5,11 +5,11 @@ import pandas as pd
 global curr_file_path
 
 
-def read_file(file_path: str) -> dict:
+def read_file(file_path: str) -> dict[str, list]:
     pure_data = pd.read_csv(file_path, sep=";")
     curr_data = pure_data.to_dict(orient="list")
 
-    data: dict = {
+    data: dict[str, list] = {
         "group": [],
         "physical_address": [],
         "logical_address": [],
@@ -31,7 +31,7 @@ def read_file(file_path: str) -> dict:
     return data
 
 
-def write_file(file_path: str, data: dict) -> None:
+def write_file(file_path: str, data: dict[str, list]) -> None:
     with open(file_path, mode="w", newline="") as file:
         writer = csv.writer(file, delimiter=";")
         header = data.keys()
@@ -40,7 +40,7 @@ def write_file(file_path: str, data: dict) -> None:
         writer.writerows(rows)
 
 
-def open_file(window: QMainWindow) -> dict:
+def open_file(window: QMainWindow) -> dict[str, list]:
     file_dialog = QFileDialog()
     file_path, _ = file_dialog.getOpenFileName(
         window, "Open File", "", "CSV files (*.csv);;All files (*.*)"
@@ -63,7 +63,7 @@ def open_file(window: QMainWindow) -> dict:
     return {}
 
 
-def save_file(window: QMainWindow, data: dict) -> None:
+def save_file(window: QMainWindow, data: dict[str, list]) -> None:
     global curr_file_path
     if curr_file_path:
         write_file(curr_file_path, data)
@@ -71,7 +71,7 @@ def save_file(window: QMainWindow, data: dict) -> None:
         save_as_file(window, data)
 
 
-def save_as_file(window: QMainWindow, data: dict) -> None:
+def save_as_file(window: QMainWindow, data: dict[str, list]) -> None:
     global curr_file_path
     file_dialog = QFileDialog()
     file_path, _ = file_dialog.getSaveFileName(

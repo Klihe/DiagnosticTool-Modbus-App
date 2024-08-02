@@ -15,21 +15,21 @@ class Device:
         self.__create()
 
     def __create(self) -> None:
-        self.__client = None
-        self.__numberOfItems = {
-            "coils": None,
-            "discrete_inputs": None,
-            "input_registers": None,
-            "holding_registers": None,
+        self.__client: ModbusSerialClient
+        self.__numberOfItems: dict[str, int] = {
+            "coils": 0,
+            "discrete_inputs": 0,
+            "input_registers": 0,
+            "holding_registers": 0,
         }
-        self.__data: dict = {
+        self.__data: dict[str, list] = {
             "group": [],
             "value": [],
         }
 
-        self.__state = State.DISCONNECTED
-        self.working = False
-        self.error = False
+        self.state = State.DISCONNECTED
+        self.working: bool = False
+        self.error: str = ""
 
     def set_working_state(
         func: Callable[["Device", Any], Any],
@@ -76,24 +76,29 @@ class Device:
             stopbits=int(stopbits),
         )
 
+        if self.__client is None:
+            self.error = "Client is None"
+            return None
+
         if self.__client.connect():
-            self.__state = State.CONNECTED
+            self.state = State.CONNECTED
             self.__number_of_items()
             self.read()
         else:
-            self.__state = State.DISCONNECTED
+            self.state = State.DISCONNECTED
             self.error = "Connection failed"
-
-        print(self.__numberOfItems)
 
     @set_working_state
     def disconnect(self) -> None:
+        if self.__client is None:
+            return
+
         self.__client.close()
-        self.__state = State.DISCONNECTED
+        self.state = State.DISCONNECTED
         self.__clear_data()
 
     def __read_until_failure(self, read_method) -> int:
-        address = 0
+        address: int = 0
 
         while True:
             try:
@@ -116,6 +121,9 @@ class Device:
         return address
 
     def __number_of_items(self) -> None:
+        if self.__client is None:
+            return
+
         self.__numberOfItems["coils"] = self.__read_until_failure(
             self.__client.read_coils
         )
@@ -142,13 +150,13 @@ class Device:
 
     def __read_item(
         self,
-        read_func: callable,
+        read_func: Callable,
         number_of_items: int,
         bits: Optional[bool] = False,
         registers: Optional[bool] = False,
-    ) -> None:
-        address = 0
-        response = []
+    ) -> list:
+        address: int = 0
+        response: list = []
 
         full_chunks, partial_chunk = self.__divide_to_sequences(number_of_items)
 
@@ -180,26 +188,26 @@ class Device:
         return response
 
     @set_working_state
-    def read(self) -> dict:
+    def read(self) -> None:
         self.__clear_data()
 
-        coil_response = self.__read_item(
+        coil_response: list = self.__read_item(
             self.__client.read_coils, self.__numberOfItems["coils"], bits=True
         )
 
-        discrete_inputs_response = self.__read_item(
+        discrete_inputs_response: list = self.__read_item(
             self.__client.read_discrete_inputs,
             self.__numberOfItems["discrete_inputs"],
             bits=True,
         )
 
-        input_registers_response = self.__read_item(
+        input_registers_response: list = self.__read_item(
             self.__client.read_input_registers,
             self.__numberOfItems["input_registers"],
             registers=True,
         )
 
-        holding_registers_response = self.__read_item(
+        holding_registers_response: list = self.__read_item(
             self.__client.read_holding_registers,
             self.__numberOfItems["holding_registers"],
             registers=True,
