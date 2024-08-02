@@ -81,7 +81,5 @@ class PlotSection(QWidget):
         # Trigger the canvas to update and redraw.
         self.canvas.draw_idle()
 
-
-
     def addSection(self, layout: QLayout) -> None:
         layout.addWidget(self.canvas)

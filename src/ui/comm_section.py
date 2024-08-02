@@ -72,7 +72,7 @@ class CommLine(QWidget):
         if self.__refresh:
             self.__item_layout.addWidget(self.__refresh_button)
             
-        self.__layout.addChildLayout(self.__item_layout)
+        self.__layout.addLayout(self.__item_layout)
             
     def _get(self) -> str:
         data = ""

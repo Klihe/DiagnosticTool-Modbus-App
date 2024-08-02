@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QPushButton, QComboBox
+from PyQt6.QtWidgets import QMainWindow, QPushButton, QComboBox
 from utils.custom_thread import CustomThread
 
 from ui.main_window import MainWindow
