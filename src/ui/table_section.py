@@ -130,17 +130,18 @@ class TableLine(QWidget):
 
     def __create(self) -> None:
         self.__item_layout = QHBoxLayout()
+        print(self.__name)
 
         self.__group_label = QLabel(self.__group)
         self.__physical_address_label = QLabel(self.__physical_address)
         self.__logical_address_label = QLabel(self.__logical_address)
 
-        if self.__name == "Coil" or self.__name == "Discrete Input":
-            self.__value_label = QLabel(self.__value)
-        else:
+        if self.__group == "Coil" or self.__group == "Holding register":
             self.__value_edit = QLineEdit(self.__value)
             self.__value_edit.setObjectName(self.__name + "_value_edit")
             self.__value_edit.setValidator(QIntValidator(0, 65535))
+        else:
+            self.__value_label = QLabel(self.__value)
 
         self.__value_changed_label = QLabel(self.__value_changed)
         self.__value_compare_label = QLabel(self.__value_compare)
@@ -162,10 +163,10 @@ class TableLine(QWidget):
         self.__group_label.setFixedSize(100, 30)
         self.__physical_address_label.setFixedSize(50, 30)
         self.__logical_address_label.setFixedSize(50, 30)
-        if self.__name == "Coil" or self.__name == "Discrete Input":
-            self.__value_label.setFixedSize(100, 30)
-        else:
+        if self.__group == "Coil" or self.__group == "Holding register":
             self.__value_edit.setFixedSize(100, 30)
+        else:
+            self.__value_label.setFixedSize(100, 30)
         self.__value_changed_label.setFixedSize(100, 30)
         self.__value_compare_label.setFixedSize(100, 30)
         self.__save_check_button.setFixedSize(50, 30)
@@ -177,7 +178,9 @@ class TableLine(QWidget):
         self.__group_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.__physical_address_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.__logical_address_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-        if self.__name == "Coil" or self.__name == "Discrete Input":
+        if self.__group == "Coil" or self.__group == "Holding register":
+            pass
+        else:
             self.__value_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.__value_changed_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.__value_compare_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
@@ -192,10 +195,10 @@ class TableLine(QWidget):
         self.__item_layout.addWidget(self.__physical_address_label)
         self.__item_layout.addWidget(self.__logical_address_label)
 
-        if self.__name == "Coil" or self.__name == "Discrete Input":
-            self.__item_layout.addWidget(self.__value_label)
-        else:
+        if self.__group == "Coil" or self.__group == "Holding register":
             self.__item_layout.addWidget(self.__value_edit)
+        else:
+            self.__item_layout.addWidget(self.__value_label)
 
         self.__item_layout.addWidget(self.__value_changed_label)
         self.__item_layout.addWidget(self.__value_compare_label)
@@ -207,42 +210,57 @@ class TableLine(QWidget):
 
         self.__layout.addLayout(self.__item_layout)
 
-    def _updateValues(self, value) -> None:
-        if self.__name == "Coil" or self.__name == "Discrete Input":
-            self.__value_label.setText(value)
-        else:
+    def _updateValues(self, value: str) -> None:
+        if self.__group == "Coil" or self.__group == "Holding register":
             self.__value_edit.setText(value)
+        else:
+            self.__value_label.setText(value)
 
 
 class TableGrid(QWidget):
     def __init__(self) -> None:
         super().__init__()
 
-        self.lines: list = []
+        self.__lines: list = []
 
-        self.__create()
-
-    def __create(self) -> None:
-        for i in range(50):
-            self.lines.append(
+    def _prepareGrid(self, data: dict) -> None:
+        temp: str = data["group"][0]
+        address: int = 0
+        
+        for i in range(len(data["group"])):
+            if temp != data["group"][i]:
+                temp = data["group"][i]
+                address = 0
+            
+            self.__lines.append(
                 TableLine(
-                    "Group",
-                    str(i),
-                    str(i + 1),
-                    "0",
-                    "0",
-                    "0",
+                    str(data["group"][i]),
+                    str(address),
+                    str(address + 1),
+                    str(data["value"][i]),
+                    "Value Changed",
+                    "Value Compare",
                     "Name",
                     "Description",
                     "Notes",
                 )
             )
+            
+            address += 1
+            
+        self._addGrid(self.__layout)
 
     def _addGrid(self, layout: QLayout) -> None:
         self.__layout = layout
 
-        for i in range(50):
-            self.lines[i]._addLine(self.__layout)
+        for line in self.__lines:
+            line._addLine(self.__layout)
+    
+    def _updateValues(self, values: list) -> None:
+        for line in self.__lines:
+            line._updateValues(str(values.pop(0)))
+        
+        self._addGrid(self.__layout)
 
 
 class TableSection(QWidget):
@@ -273,3 +291,9 @@ class TableSection(QWidget):
         self.__scroll_area.setWidget(self.__grid_container)
 
         self.__layout.addWidget(self.__scroll_area)
+    
+    def updateValues(self, values: list) -> None:
+        self.__grid._updateValues(values)
+        
+    def prepareTable(self, data: dict) -> None:
+        self.__grid._prepareGrid(data)

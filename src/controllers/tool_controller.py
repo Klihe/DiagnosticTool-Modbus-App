@@ -43,11 +43,15 @@ class ToolController:
                 byte_size = data["bytesize"]
                 parity = data["parity"]
                 stop_bits = data["stopbits"]
-
+                
             self.__device.connect(method, port, baudrate, byte_size, parity, stop_bits)
+            
+        def after_thread_func() -> None:
+            self.__parent.table_section.prepareTable(self.__device.data)
 
         self.__connect_device_thread = CustomThread()
         self.__connect_device_thread.set_function(thread_func)
+        self.__connect_device_thread.finished.connect(after_thread_func)
         self.__connect_device_thread.start()
 
     def __disconnect_func(self) -> None:
@@ -61,6 +65,7 @@ class ToolController:
     def __read_func(self) -> None:
         def thread_func() -> None:
             self.__device.read()
+            self.__parent.table_section.updateValues(self.__device.data["value"])
 
         self.__read_device_thread = CustomThread()
         self.__read_device_thread.set_function(thread_func)

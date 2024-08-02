@@ -22,7 +22,7 @@ class Device:
             "input_registers": 0,
             "holding_registers": 0,
         }
-        self.__data: dict[str, list] = {
+        self.data: dict[str, list] = {
             "group": [],
             "value": [],
         }
@@ -44,8 +44,8 @@ class Device:
         return wrapper
 
     def __clear_data(self) -> None:
-        for key in self.__data:
-            self.__data[key] = []
+        for key in self.data:
+            self.data[key] = []
 
     @set_working_state
     def connect(
@@ -145,8 +145,8 @@ class Device:
 
     def __enter_data(self, group: str, response: list) -> None:
         for i in range(len(response)):
-            self.__data["group"].append(group)
-            self.__data["value"].append(response[i])
+            self.data["group"].append(group)
+            self.data["value"].append(response[i])
 
     def __read_item(
         self,
