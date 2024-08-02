@@ -1,5 +1,6 @@
 import sys
 
+
 def load_stylesheet() -> str:
     """Load the stylesheet from the stylesheet.css file
 
@@ -9,7 +10,7 @@ def load_stylesheet() -> str:
     Returns:
         str: The stylesheet from the stylesheet.css file
     """
-    
+
     try:
         # Open the stylesheet.css file in read mode
         with open("src/resources/stylesheet.css", "r") as file:
