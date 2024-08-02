@@ -8,7 +8,7 @@ def read_file(file_path: str) -> dict:
     pure_data = pd.read_csv(file_path, sep=";")
     curr_data = pure_data.to_dict(orient='list')
     
-    data = {
+    data: dict = {
         'group': [],
         'physical_address': [],
         'logical_address': [],
@@ -47,7 +47,7 @@ def open_file(window: QMainWindow) -> dict:
             header = next(reader)
             if header == ['group', 'physical_address', 'logical_address', 'value', 'name', 'description', 'notes']:
                 return read_file(file_path)
-    return None
+    return {}
             
 def save_file(window: QMainWindow, data: dict) -> None:
     global curr_file_path

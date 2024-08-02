@@ -1,12 +1,24 @@
 from PyQt6.QtWidgets import QWidget, QLabel, QComboBox, QLineEdit, QPushButton, QLayout, QHBoxLayout
-from PyQt6.QtCore import pyqtSlot
+from PyQt6.QtCore import Qt, pyqtSlot
 
 class CommState:
     def __init__(self) -> None:
         self.__create()
         
     def __create(self) -> None:
-        pass
+        self.__label = QLabel("State")
+        self.__label.setStyleSheet("background-color: white;")
+        self.__label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.__label.setFixedHeight(30)
+        
+        self.__label.setObjectName("state_label")
+        
+    def change_state(self, text: str, color: str) -> None:
+        self.__label.setText(text)
+        self.__label.setStyleSheet(f"background-color: {color};")
+        
+    def addState(self, layout: QLayout) -> None:
+        layout.addWidget(self.__label)
 
 class CommLine(QWidget):
     def __init__(self, descr: str, options: list[None], default_option: str, custom: bool, refresh: bool) -> None:
@@ -32,6 +44,7 @@ class CommLine(QWidget):
         self.__options_box.setCurrentText(self.__default_option)
         
         self.__edit = QLineEdit()
+        self.__edit.setObjectName(self.__id + "_edit")
         self.__edit.hide()
         
         self.__custom_switch = None
@@ -59,7 +72,7 @@ class CommLine(QWidget):
         if self.__refresh:
             self.__item_layout.addWidget(self.__refresh_button)
             
-        self.__layout.addLayout(self.__item_layout)
+        self.__layout.addChildLayout(self.__item_layout)
             
     def _get(self) -> str:
         data = ""
@@ -119,9 +132,12 @@ class CommSection(QWidget):
         
     def __create(self) -> None:
         
+        self.__state = CommState()
+        
         self.__client = CommLine(descr="Client", options=self.__config["communication"]["client_options"],  default_option=self.__config["communication"]["client_default"], custom=False, refresh=False)
         self.__method = CommLine(descr="Method", options=self.__config["communication"]["method_options"],  default_option=self.__config["communication"]["client_default"], custom=True, refresh=False)
         self.__port = CommLine(descr="Port", options=self.__config["communication"]["port_options"],  default_option=self.__config["communication"]["client_default"], custom=False, refresh=True)
+        self.__baudrate = CommLine(descr="Baudrate", options=self.__config["communication"]["baudrate_options"],  default_option=self.__config["communication"]["client_default"], custom=True, refresh=False)
         self.__bytesize = CommLine(descr="Byte Size", options=self.__config["communication"]["bytesize_options"],  default_option=self.__config["communication"]["client_default"], custom=True, refresh=False)
         self.__parity = CommLine(descr="Parity", options=self.__config["communication"]["parity_options"],  default_option=self.__config["communication"]["client_default"], custom=True, refresh=False)
         self.__stopbits = CommLine(descr="Stop Bits", options=self.__config["communication"]["stopbits_options"],  default_option=self.__config["communication"]["client_default"], custom=True, refresh=False)
@@ -132,9 +148,12 @@ class CommSection(QWidget):
     def addSection(self, layout: QLayout) -> None:
         self.__layout = layout
         
+        self.__state.addState(self.__layout)
+        
         self.__client._addLine(self.__layout)
         self.__method._addLine(self.__layout)
         self.__port._addLine(self.__layout)
+        self.__baudrate._addLine(self.__layout)
         self.__bytesize._addLine(self.__layout)
         self.__parity._addLine(self.__layout)
         self.__stopbits._addLine(self.__layout)
@@ -153,6 +172,7 @@ class CommSection(QWidget):
             # Serial
             self.__method._show()
             self.__port._show()
+            self.__baudrate._show()
             self.__bytesize._show()
             self.__parity._show()
             self.__stopbits._show()
@@ -160,9 +180,25 @@ class CommSection(QWidget):
             # Serial
             self.__method._hide()
             self.__port._hide()
+            self.__baudrate._hide()
             self.__bytesize._hide()
             self.__parity._hide()
             self.__stopbits._hide()
             # TCP
             self.__ip._show()
             self.__server._show()
+    
+    def get_data(self) -> dict:
+        data = {
+            "client": self.__client._get(),
+            "method": self.__method._get(),
+            "port": self.__port._get(),
+            "baudrate": self.__baudrate._get(),
+            "bytesize": self.__bytesize._get(),
+            "parity": self.__parity._get(),
+            "stopbits": self.__stopbits._get(),
+            "ip": self.__ip._get(),
+            "server": self.__server._get()
+        }
+        
+        return data

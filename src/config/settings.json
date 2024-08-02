@@ -35,5 +35,9 @@
         "macOS": "/dev/cu.usbserial",
         "linux": "/dev/cu.usbserial",
         "windows": "COM"
+    },
+
+    "device": {
+        "max_count": 125
     }
 }

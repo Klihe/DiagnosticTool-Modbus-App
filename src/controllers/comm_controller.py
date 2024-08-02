@@ -1,10 +1,12 @@
-from PyQt6.QtWidgets import QMainWindow, QPushButton, QComboBox
+from PyQt6.QtWidgets import QPushButton, QComboBox
 from utils.custom_thread import CustomThread
+
+from ui.main_window import MainWindow
 
 from models.ports import find_ports
 
 class CommController:
-    def __init__(self, parent: QMainWindow) -> None:
+    def __init__(self, parent: MainWindow) -> None:
         self.__parent = parent
 
         self.__find()
@@ -22,9 +24,14 @@ class CommController:
         
         def thread_func() -> None:
             find_ports()
+            
+        def after_thread_func() -> None:
+            self.__parent.findChild(QComboBox, "port_options_box").clear()
+            self.__parent.findChild(QComboBox, "port_options_box").addItems(find_ports())
         
         self.__port_refresh_thread = CustomThread()
         self.__port_refresh_thread.set_function(thread_func)
+        self.__port_refresh_thread.finished.connect(after_thread_func)
         self.__port_refresh_thread.start()
         
     def __client_options_box_func(self) -> None:

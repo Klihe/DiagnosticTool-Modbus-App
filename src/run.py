@@ -1,6 +1,7 @@
 import sys
 from PyQt6.QtWidgets import QApplication
 from controllers.main_controller import MainController
+from models.device import Device
 from config.settings import load_settings
 from resources.stylesheet import load_stylesheet
 
@@ -20,9 +21,11 @@ class Application:
         
         # Set the stylesheet
         # self.app.setStyleSheet(self.__stylesheet)
-        
+
+        # Create the device
+        self.__device = Device(self.__config)
         # Create the main window
-        self.__controller = MainController(self.__config)
+        self.__controller = MainController(self.__config, self.__device)
         
         # Show the main window
         self.__controller.show()

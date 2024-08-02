@@ -1,8 +1,12 @@
-from PyQt6.QtWidgets import QMainWindow, QToolButton
+from PyQt6.QtWidgets import QMainWindow, QToolButton, QComboBox, QLineEdit, QPushButton
+from utils.custom_thread import CustomThread
+from models.device import Device
+
 
 class ToolController:
-    def __init__(self, parent: QMainWindow) -> None:
+    def __init__(self, parent: QMainWindow, device: Device) -> None:
         self.__parent = parent
+        self.__device = device
 
         self.__find()
         self.__connect()
@@ -17,10 +21,44 @@ class ToolController:
         self.__reset_plot = self.__parent.findChild(QToolButton, "ResetPlot")
         
     def __connect(self) -> None:
-        self.__connect_.clicked.connect(lambda: print("Connect"))
-        self.__disconnect.clicked.connect(lambda: print("Disconnect"))
+        self.__connect_.clicked.connect(self.__connect_func)
+        self.__disconnect.clicked.connect(self.__disconnect_func)
         self.__write.clicked.connect(lambda: print("Write"))
         self.__read.clicked.connect(lambda: print("Read"))
         self.__read_in_interval.clicked.connect(lambda: print("ReadInInterval"))
         self.__compare.clicked.connect(lambda: print("Compare"))
         self.__reset_plot.clicked.connect(lambda: print("ResetPlot"))
+        
+    def __connect_func(self) -> None:
+        data = self.__parent.comm_section.get_data()
+        
+        def thread_func() -> None:
+            if data["client"] == "Serial":
+                method = data["method"]
+                port = data["port"]
+                baudrate = data["baudrate"]
+                byte_size = data["bytesize"]
+                parity = data["parity"]
+                stop_bits = data["stopbits"]
+                
+            self.__device.connect(method, port, baudrate, byte_size, parity, stop_bits)
+            
+        self.__connect_device_thread = CustomThread()
+        self.__connect_device_thread.set_function(thread_func)
+        self.__connect_device_thread.start()
+        
+    def __disconnect_func(self) -> None:
+        def thread_func() -> None:
+            self.__device.disconnect()
+        
+        self.__disconnect_device_thread = CustomThread()
+        self.__disconnect_device_thread.set_function(thread_func)
+        self.__disconnect_device_thread.start()
+        
+    def __read_func(self) -> None:
+        def thread_func() -> None:
+            self.__device.read()
+        
+        self.__read_device_thread = CustomThread()
+        self.__read_device_thread.set_function(thread_func)
+        self.__read_device_thread.start()

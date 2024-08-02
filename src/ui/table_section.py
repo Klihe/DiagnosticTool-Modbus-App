@@ -24,7 +24,7 @@ class TableSearch(QWidget):
         self.__item_layout.addWidget(self.__search_options_box)
         self.__item_layout.addWidget(self.__search_button)
         
-        self.__layout.addLayout(self.__item_layout)
+        self.__layout.addChildLayout(self.__item_layout)
 
 class TableDescription(QWidget):
     def __init__(self) -> None:
@@ -86,7 +86,7 @@ class TableDescription(QWidget):
         self.__item_layout.addWidget(self.__description_label)
         self.__item_layout.addWidget(self.__notes_label)
         
-        self.__layout.addLayout(self.__item_layout)
+        self.__layout.addChildLayout(self.__item_layout)
 class TableLine(QWidget):
     def __init__(self, group: str, physical_address: str, logical_address: str, value: str, value_changed: str, value_compare: str, name: str, description: str, notes: str) -> None:
         super().__init__()
@@ -180,13 +180,19 @@ class TableLine(QWidget):
         self.__item_layout.addWidget(self.__description_edit)
         self.__item_layout.addWidget(self.__notes_edit)
         
-        self.__layout.addLayout(self.__item_layout)
+        self.__layout.addChildLayout(self.__item_layout)
+        
+    def _updateValues(self, value) -> None:
+        if self.__name == "Coil" or self.__name == "Discrete Input":
+            self.__value_label.setText(value)
+        else:
+            self.__value_edit.setText(value)
         
 class TableGrid(QWidget):
     def __init__(self) -> None:
         super().__init__()
         
-        self.lines = []
+        self.lines: list = []
         
         self.__create()
         
